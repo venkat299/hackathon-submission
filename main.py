@@ -4,6 +4,9 @@ import openai
 import os
 import json
 from dotenv import load_dotenv
+from dspy.llms.google import Google
+
+# remove from dspy.llms.google import Google and add from langchain_google_genai import ChatGoogleGenerativeAI. AI!
 
 from models.state import SimulationState, MemberProfile
 from agents.modules import Agent, MemberAgent
@@ -30,22 +33,14 @@ class ClockUpdater:
             yield self.env.timeout(0.01) # Update resolution
 
 def setup_dspy():
-    """Configures the DSPy framework with the LLM."""
+    """Loads environment variables and configures DSPy settings."""
     load_dotenv()
-    if LLM_MODEL.startswith('gpt-'):
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY not found in .env file")
-        llm = dspy.OpenAI(model=LLM_MODEL, api_key=api_key, max_tokens=250)
-    elif LLM_MODEL.startswith('gemini-'):
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
-            raise ValueError("GOOGLE_API_KEY not found in .env file")
-        llm = dspy.Google(model=LLM_MODEL, api_key=api_key)
-    else:
-        raise ValueError(f"Unsupported LLM model: {LLM_MODEL}")
-
-    dspy.settings.configure(lm=llm)
+    gemini = Google(
+        model="gemini",
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        temperature=0.2
+    )
+    dspy.settings.configure(lm=gemini)
 
 def main():
     """Main function to set up and run the simulation."""
