@@ -33,9 +33,9 @@ class ClockUpdater:
 def setup_dspy():
     """Loads environment variables and configures DSPy settings."""
     load_dotenv()
-    gemini = Google(
-        model="gemini",
-        api_key=os.getenv("GOOGLE_API_KEY"),
+    gemini = ChatGoogleGenerativeAI(
+        model="gemini-pro",
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
         temperature=0.2
     )
     dspy.settings.configure(lm=gemini)
