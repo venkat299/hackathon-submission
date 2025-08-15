@@ -17,7 +17,7 @@ class GenerateResponse(dspy.Signature):
             "message": "A natural, in-character WhatsApp-style message for the user. IMPORTANT: The message must be concise, between 5 and 50 words.",
             "action": {
                 "type": "The type of action to take (e.g., 'INITIATE_SICK_DAY_PROTOCOL', 'FLAG_FOR_EXPERT', 'UPDATE_NARRATIVE_FLAG'). Can be 'NONE'.",
-                "payload": "A dictionary with data for the action (e.g., {'expert_name': 'Dr. Warren'}, {'flag': 'consult_scheduled', 'value': true})."
+                "payload": "A dictionary with data for the action (e.g., {'expert_name': 'Dr. Warren'}, {'flag': 'consultation_scheduled', 'value': true})."
             }
         }
     )
