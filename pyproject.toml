@@ -1,0 +1,14 @@
+[project]
+name = "med-data-generation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dspy-ai>=3.0.1",
+    "openai>=1.99.9",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.1.1",
+    "simpy>=4.1.1",
+]
+# No module named 'dspy.llms' AI!
