@@ -35,7 +35,7 @@ def setup_dspy():
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY not found in.env file")
-    # add option to switch to gemini. AI!
+    # switch to gemini. AI
     llm = dspy.OpenAI(model=LLM_MODEL, api_key=api_key, max_tokens=250)
     dspy.settings.configure(lm=llm)
 
