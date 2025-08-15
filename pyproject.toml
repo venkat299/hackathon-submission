@@ -12,4 +12,3 @@ dependencies = [
     "simpy>=4.1.1",
     "google-generativeai>=0.3.0",
 ]
-# No module named 'dspy.llms' AI!
