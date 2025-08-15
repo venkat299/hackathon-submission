@@ -13,3 +13,4 @@ wheels/
 .DS_Store
 uv.lock
 simulation_log_des_only.json
+simulation_log.json
