@@ -2,6 +2,18 @@ import random
 from utils import log_event, distill_context, parse_llm_response
 from config import PLAN_ADHERENCE_PROBABILITY, AVG_DAYS_PER_MEMBER_QUESTION, LOCS
 import json
+
+# --- Scripted scenario timeline -------------------------------------------------
+# These events provide a deterministic backbone for the simulation so that key
+# narrative beats happen on fixed days.  Each event dictionary must at least
+# define a ``day`` and ``type``.  Additional fields are interpreted by the
+# processes that consume them (e.g., ``issue`` and ``duration`` for ILLNESS
+# events).
+SCENARIO_TIMELINE = [
+    {"day": 7, "type": "ILLNESS", "issue": "Minor Illness (Cold/Flu)", "duration": 3},
+    {"day": 14, "type": "THERAPY_SESSION", "provider": "Physical Therapist"},
+    {"day": 30, "type": "MILESTONE", "milestone": "30-day progress check"},
+]
 def timeline_process(env, state):
     """Schedules all deterministic and periodic events based on the high-level plan."""
     # Initial onboarding
@@ -48,23 +60,48 @@ def travel_process(env, state):
         # Corrected Typo Here
         log_event(state, "TRAVEL_END", "SIM_CORE", {"location": "Singapore"})
 
-def health_issues_process(env, state):
-    """
-    Probabilistically simulates the onset of minor health issues based on the member's
-    state, travel, and lifestyle.
-    """
-    yield env.timeout(1) # Delay start
-    while True:
-        yield env.timeout(1) # Run this check once per day
+def health_issues_process(env, state, scenario=SCENARIO_TIMELINE):
+    """Handles deterministic health/story events and falls back to random issues.
 
+    The process first checks the :data:`SCENARIO_TIMELINE` for any scripted events
+    scheduled for the current day.  If none are found, it uses probabilistic logic
+    to potentially introduce a minor health issue based on lifestyle factors.
+    """
+    yield env.timeout(1)  # Delay start
+    scenario_queue = sorted(list(scenario), key=lambda e: e["day"])  # work on a copy
+
+    while True:
+        yield env.timeout(1)  # Run this check once per day
+
+        # --- Resolve existing issues -------------------------------------------------
         if state.narrative_flags.get('active_issue') and state.current_day >= state.narrative_flags.get('issue_resolves_on', -1):
             resolved_issue = state.narrative_flags.pop('active_issue')
             state.narrative_flags.pop('issue_resolves_on')
             log_event(state, "HEALTH_ISSUE_RESOLVED", "SIM_CORE", {"issue": resolved_issue})
 
-        if 'issue_cooldown_until' in state.narrative_flags and state.current_day < state.narrative_flags['issue_cooldown_until']:
+        # --- Handle scripted events --------------------------------------------------
+        while scenario_queue and scenario_queue[0]["day"] == state.current_day:
+            event = scenario_queue.pop(0)
+            if event["type"] == "ILLNESS":
+                issue = event["issue"]
+                duration = event.get("duration", 3)
+                state.narrative_flags['active_issue'] = issue
+                state.narrative_flags['issue_resolves_on'] = state.current_day + duration
+                state.narrative_flags['issue_cooldown_until'] = state.current_day + duration + 7
+                log_event(state, "HEALTH_ISSUE", "SIM_CORE", {"issue": issue, "scripted": True, "duration_days": duration})
+            elif event["type"] == "THERAPY_SESSION":
+                state.narrative_flags['therapy_session_today'] = True
+                log_event(state, "THERAPY_SESSION", "SIM_CORE", {"provider": event.get("provider", "Therapist")})
+            elif event["type"] == "MILESTONE":
+                log_event(state, "POSITIVE_MILESTONE", "SIM_CORE", {"milestone": event.get("milestone", "Milestone reached")})
+
+        # Skip random generation if cooling down or an issue already active
+        if state.narrative_flags.get('active_issue') or (
+            'issue_cooldown_until' in state.narrative_flags and state.current_day < state.narrative_flags['issue_cooldown_until']
+        ):
             continue
 
+        # --- Probabilistic fallback --------------------------------------------------
         PROBS = {
             "Minor Illness (Cold/Flu)": 0.005, "Muscle Strain/Joint Pain": 0.004,
             "Bout of Indigestion": 0.007, "Stress Headache": 0.006, "Blood Pressure Spike": 0.003
@@ -135,13 +172,14 @@ def proactive_expert_process(env, state, elyx_agents):
             responder = "Ruby"
             trigger_event = "Action: Send the onboarding documents and data request to Rohan."
             state.narrative_flags['onboarding_docs_sent'] = True
-        
+
         elif state.narrative_flags.get('active_issue'):
             issue = state.narrative_flags['active_issue']
             if "Strain" in issue: responder = "Rachel"
             elif "Illness" in issue or "Pressure" in issue: responder = "Dr. Warren"
             elif "Indigestion" in issue: responder = "Carla"
             else: responder = "Dr. Warren"
+
             if not state.narrative_flags.get('consultation_scheduled'):
                 trigger_event = f"""
                 CRITICAL HEALTH ALERT: Rohan is experiencing '{issue}'.
@@ -155,6 +193,7 @@ def proactive_expert_process(env, state, elyx_agents):
                 TASK: Offer guidance and support without sending any additional scheduling links.
                 """
         
+
         elif last_event and last_event['type'] == 'POSITIVE_MILESTONE':
             responder = "Neel"
             trigger_event = f"""
