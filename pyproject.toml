@@ -5,11 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "dspy-ai>=3.0.1",
+    "dspy>=3.0.1",
     "openai>=1.99.9",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
     "simpy>=4.1.1",
     "google-generativeai>=0.3.0",
 ]
-# remove dspy-ai and add dspy. use uv instead of pip. AI!
+# Use uv for faster dependency management: uv pip install -r requirements.txt
