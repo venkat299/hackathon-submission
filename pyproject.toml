@@ -10,6 +10,4 @@ dependencies = [
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
     "simpy>=4.1.1",
-    #remove  below AI
-    "google-generativeai>=0.8.5",
 ]

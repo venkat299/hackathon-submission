@@ -33,13 +33,11 @@ class ClockUpdater:
 def setup_dspy():
     """Loads environment variables and configures DSPy settings."""
     load_dotenv()
-    # remove and add import dspy lm = dspy.LM("gemini/gemini-2.5-flash", api_key="YOUR_GEMINI_API_KEY") dspy.configure(lm=lm) AI!
-    gemini = ChatGoogleGenerativeAI(
-        model="gemini",
-        google_api_key=os.getenv("GOOGLE_API_KEY"),
-        temperature=0.2
+    gemini = dspy.LM(
+        model="gemini/gemini-2.5-flash",
+        api_key=os.getenv("GOOGLE_API_KEY")
     )
-    dspy.settings.configure(lm=gemini)
+    dspy.configure(lm=gemini)
 
 def main():
     """Main function to set up and run the simulation."""
