@@ -187,8 +187,10 @@ def proactive_expert_process(env, state, elyx_agents):
             TASK: Write a strategic, big-picture message to Rohan. Acknowledge the milestone and connect the team's day-to-day work back to his highest-level goals. Reassure him of the long-term vision.
             """
 
-        elif random.random() > PLAN_ADHERENCE_PROBABILITY:
-             if state.intervention_plan.adherence_status == "ON_TRACK":
+        # Check if the member deviates from the plan. PLAN_ADHERENCE_PROBABILITY
+        # represents the chance of deviating, not staying on track.
+        elif random.random() < PLAN_ADHERENCE_PROBABILITY:
+            if state.intervention_plan.adherence_status == "ON_TRACK":
                 state.intervention_plan.adherence_status = "DEVIATED"
                 responder = "Ruby"
                 trigger_event = f"""
