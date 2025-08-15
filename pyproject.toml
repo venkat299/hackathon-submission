@@ -12,4 +12,4 @@ dependencies = [
     "simpy>=4.1.1",
     "google-generativeai>=0.3.0",
 ]
-# remove dspy-ai and add dspy AI!
+# remove dspy-ai and add dspy. use uv instead of pip. AI!
