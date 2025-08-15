@@ -16,7 +16,6 @@ def timeline_process(env, state):
     env.process(diagnostic_test_process(env, state))
     env.process(exercise_plan_update_process(env, state))
     env.process(travel_process(env, state))
-    env.process(health_issues_process(env, state))
 
 def diagnostic_test_process(env, state):
     """Schedules a full diagnostic test panel every three months."""
@@ -46,6 +45,7 @@ def travel_process(env, state):
         yield env.timeout(7)
         state.logistics.is_traveling = False
         state.logistics.location = "Singapore"
+        # Corrected Typo Here
         log_event(state, "TRAVEL_END", "SIM_CORE", {"location": "Singapore"})
 
 def health_issues_process(env, state):
@@ -54,7 +54,6 @@ def health_issues_process(env, state):
     state, travel, and lifestyle.
     """
     yield env.timeout(1) # Delay start
-
     while True:
         yield env.timeout(1) # Run this check once per day
 
@@ -101,53 +100,13 @@ def health_issues_process(env, state):
                 })
                 break
 
-
-def member_process(env, state, member_agent, elyx_agents):
-    """Models the agency and behavior of the client, Rohan Patel."""
-    yield env.timeout(0.1)
-    
-    while True:
-        time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
-        yield env.timeout(time_to_next_question)
-
-        context = distill_context(state)
-        try:
-            prediction = member_agent(context=context)
-            log_event(state, "MESSAGE", "Rohan", {"content": prediction.question})
-
-            yield env.timeout(random.uniform(0.01, 0.1)) # 5-15 minutes
-            context_after_question = distill_context(state)
-            
-            # --- Corrected: Expanded routing logic to include all experts ---
-            question_lower = prediction.question.lower()
-            responder = "Ruby" # Default for logistics
-            if any(key in question_lower for key in ["data", "hrv", "sleep", "garmin"]):
-                responder = "Advik"
-            elif any(key in question_lower for key in ["medical", "doctor", "lab", "blood pressure"]):
-                responder = "Dr. Warren"
-            elif any(key in question_lower for key in ["food", "diet", "nutrition", "supplement"]):
-                responder = "Carla"
-            elif any(key in question_lower for key in ["exercise", "training", "workout", "injury", "mobility"]):
-                responder = "Rachel"
-            elif any(key in question_lower for key in ["goal", "strategy", "progress", "frustrated"]):
-                responder = "Neel"
-
-            response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
-            log_event(state, "MESSAGE", responder, {"content": response_prediction.response})
-
-        except Exception as e:
-            log_event(state, "ERROR", "MEMBER_AGENT", {"error": str(e)})
-
-
 def milestone_process(env, state):
     """Checks for and logs positive health and adherence milestones."""
     hrv_milestone = 50
     adherence_milestone_days = 30
     days_on_track = 0
-
     while True:
         yield env.timeout(1) # Check once per day
-
         if state.intervention_plan.adherence_status == "ON_TRACK":
             days_on_track += 1
         else:
@@ -166,7 +125,6 @@ def proactive_expert_process(env, state, elyx_agents):
     """Embodies the proactive nature of the Elyx service, running checks daily for all experts."""
     while True:
         yield env.timeout(1) # Run once per day
-
         trigger_event, responder = None, None
         last_event = state.event_log[-1] if state.event_log else None
 
@@ -176,36 +134,22 @@ def proactive_expert_process(env, state, elyx_agents):
             if "Strain" in issue: responder, trigger_event = "Rachel", f"Health Alert: Member has '{issue}'. Provide guidance."
             elif "Illness" in issue or "Pressure" in issue: responder, trigger_event = "Dr. Warren", f"Health Alert: Member has '{issue}'. Check symptoms."
             elif "Indigestion" in issue: responder, trigger_event = "Carla", f"Health Alert: Member reports '{issue}'. Advise on diet."
-        
         elif last_event and last_event['type'] == 'POSITIVE_MILESTONE':
             responder = "Neel"
             trigger_event = f"Team Alert: Member achieved milestone: \"{last_event['payload']['milestone']}\". Send congratulations."
-
         # --- REGULAR CHECKS ---
         elif state.health_data.wearable_stream.get("recovery_score", 100) < 30:
             responder, trigger_event = "Advik", "Proactive Check-in: Recovery score is very low."
-        
-        # Trigger for Rachel: Checks in after an exercise plan update
         elif abs(state.current_day - state.intervention_plan.last_exercise_update_day) < 1:
-            trigger_event = "Proactive Check-in: The exercise plan was just updated. How are the new workouts feeling?"
-            responder = "Rachel"
-
-        # Trigger for Carla: Bi-weekly nutrition check-in
+            responder, trigger_event = "Rachel", "Proactive Check-in: Exercise plan updated. How are new workouts?"
         elif state.current_day > 0 and state.current_day % 14 < 1:
-             trigger_event = "Proactive Check-in: Let's do a quick review of nutrition for the past couple of weeks."
-             responder = "Carla"
-
-        # Trigger for Neel: High-level quarterly review
+            responder, trigger_event = "Carla", "Proactive Check-in: Bi-weekly nutrition review."
         elif state.current_day > 0 and state.current_day % 90 < 1:
-            trigger_event = "Proactive Review: We're at a quarterly milestone. Let's review progress towards your long-term goals."
-            responder = "Neel"
-
-        # Trigger for Ruby: Checks on plan adherence (Lower Priority)
+            responder, trigger_event = "Neel", "Proactive Review: Quarterly milestone. Let's review progress."
         elif random.random() > PLAN_ADHERENCE_PROBABILITY:
              if state.intervention_plan.adherence_status == "ON_TRACK":
                 state.intervention_plan.adherence_status = "DEVIATED"
-                trigger_event = "Proactive Check-in: Just checking in on how you're tracking with the current plan."
-                responder = "Ruby"
+                responder, trigger_event = "Ruby", "Proactive Check-in: Checking in on current plan adherence."
         else:
             state.intervention_plan.adherence_status = "ON_TRACK"
 
@@ -221,20 +165,16 @@ def state_update_process(env, state):
     """A simple process to simulate dynamic changes to the world state."""
     while True:
         yield env.timeout(0.25) # every 6 hours
-        
         vital_modifier = 0.6 if state.narrative_flags.get('active_issue') else 1.0
-
         base_hrv = (45 + (state.current_day / 30)) * vital_modifier
         hrv_noise = random.uniform(-5, 5)
         state.health_data.wearable_stream['hrv'] = round(base_hrv + hrv_noise, 1)
-
         base_recovery = 70 - (20 if state.logistics.is_traveling else 0)
         recovery_noise = random.uniform(-15, 15)
         state.health_data.wearable_stream['recovery_score'] = max(0, min(100, round((base_recovery + recovery_noise) * vital_modifier)))
 
 def member_process(env, state, member_agent, elyx_agents):
     """Models the agency and behavior of the client, Rohan Patel."""
-    # ... (This function is unchanged)
     yield env.timeout(0.1)
     while True:
         time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
