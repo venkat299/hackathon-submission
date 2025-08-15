@@ -32,11 +32,19 @@ class ClockUpdater:
 def setup_dspy():
     """Configures the DSPy framework with the LLM."""
     load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY not found in.env file")
-    # switch to gemini. AI
-    llm = dspy.OpenAI(model=LLM_MODEL, api_key=api_key, max_tokens=250)
+    if LLM_MODEL.startswith('gpt-'):
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY not found in .env file")
+        llm = dspy.OpenAI(model=LLM_MODEL, api_key=api_key, max_tokens=250)
+    elif LLM_MODEL.startswith('gemini-'):
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            raise ValueError("GOOGLE_API_KEY not found in .env file")
+        llm = dspy.Google(model=LLM_MODEL, api_key=api_key)
+    else:
+        raise ValueError(f"Unsupported LLM model: {LLM_MODEL}")
+
     dspy.settings.configure(lm=llm)
 
 def main():

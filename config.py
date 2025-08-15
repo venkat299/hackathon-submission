@@ -48,5 +48,5 @@ AGENT_PERSONAS = {
 }
 
 # --- DSPy Configuration ---
-# add configuration for gemini. AI!
-LLM_MODEL = "gpt-4-turbo-preview"
+# Supported models: "gpt-4-turbo-preview" (OpenAI) or "gemini-pro" (Google)
+LLM_MODEL = "gemini-pro"
