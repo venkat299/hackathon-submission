@@ -14,6 +14,23 @@ class GenerateMemberQuestion(dspy.Signature):
     context = dspy.InputField(desc="The current simulation state and recent conversation history.")
     question = dspy.OutputField(desc="A concise, in-character question or statement for the Elyx team.")
 
+class RouteQuestion(dspy.Signature):
+    """Given a user's question and a list of expert roles, choose the best expert to respond."""
+    question = dspy.InputField(desc="The user's question.")
+    expert_roles = dspy.InputField(desc="A detailed list of available experts and their specific roles.")
+    expert_name = dspy.OutputField(desc="The single best expert name from the provided list (e.g., 'Dr. Warren', 'Carla').")
+
+class Router(dspy.Module):
+    def __init__(self, agent_names):
+        super().__init__()
+        # Create a formatted string of expert roles to give the LLM context
+        self.expert_roles = "\n".join([f"- {name}: {AGENT_PERSONAS[name]}" for name in agent_names])
+        self.route = dspy.Predict(RouteQuestion)
+
+    def forward(self, question):
+        prediction = self.route(question=question, expert_roles=self.expert_roles)
+        return prediction
+    
 class Agent(dspy.Module):
     def __init__(self, agent_name: str):
         super().__init__()
@@ -22,24 +39,13 @@ class Agent(dspy.Module):
         self.generate_response = dspy.ChainOfThought(GenerateResponse)
 
     def forward(self, context, trigger):
-        prediction = self.generate_response(
-            persona=self.persona,
-            context=context,
-            trigger=trigger
-        )
-        return prediction
+        return self.generate_response(persona=self.persona, context=context, trigger=trigger)
 
 class MemberAgent(dspy.Module):
     def __init__(self):
         super().__init__()
-        # --- CORRECTED LINE ---
-        # The persona is now correctly set to only Rohan's persona.
         self.persona = AGENT_PERSONAS["Rohan"]
         self.generate_question = dspy.ChainOfThought(GenerateMemberQuestion)
 
     def forward(self, context):
-        prediction = self.generate_question(
-            persona=self.persona,
-            context=context
-        )
-        return prediction
+        return self.generate_question(persona=self.persona, context=context)

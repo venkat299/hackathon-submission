@@ -173,26 +173,40 @@ def state_update_process(env, state):
         recovery_noise = random.uniform(-15, 15)
         state.health_data.wearable_stream['recovery_score'] = max(0, min(100, round((base_recovery + recovery_noise) * vital_modifier)))
 
-def member_process(env, state, member_agent, elyx_agents):
+def member_process(env, state, member_agent, elyx_agents, router): # Added 'router'
     """Models the agency and behavior of the client, Rohan Patel."""
     yield env.timeout(0.1)
+    
     while True:
         time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
         yield env.timeout(time_to_next_question)
+
         context = distill_context(state)
         try:
             prediction = member_agent(context=context)
             log_event(state, "MESSAGE", "Rohan", {"content": prediction.question})
+
             yield env.timeout(random.uniform(0.01, 0.1))
             context_after_question = distill_context(state)
-            question_lower = prediction.question.lower()
-            responder = "Ruby"
-            if any(key in question_lower for key in ["data", "hrv", "sleep"]): responder = "Advik"
-            elif any(key in question_lower for key in ["medical", "doctor", "lab"]): responder = "Dr. Warren"
-            elif any(key in question_lower for key in ["food", "diet", "nutrition"]): responder = "Carla"
-            elif any(key in question_lower for key in ["exercise", "training", "workout"]): responder = "Rachel"
-            elif any(key in question_lower for key in ["goal", "strategy", "progress"]): responder = "Neel"
+            
+            # --- Semantic Routing Logic ---
+            # Replace the entire if/elif block with a call to the AI router.
+            routing_prediction = router(question=prediction.question)
+            
+            # Use the LLM's choice, with a safe fallback to Ruby.
+            responder = routing_prediction.expert_name
+            if responder not in elyx_agents:
+                responder = "Ruby" # Default if the LLM hallucinates a name
+
+            # Add a log event to see the routing decision!
+            log_event(state, "ROUTING", "SIM_CORE", {
+                "question": prediction.question,
+                "routed_to": responder,
+                "method": "semantic_llm"
+            })
+
             response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
             log_event(state, "MESSAGE", responder, {"content": response_prediction.response})
+
         except Exception as e:
             log_event(state, "ERROR", "MEMBER_AGENT", {"error": str(e)})

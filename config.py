@@ -7,7 +7,7 @@ SIMULATION_DURATION_DAYS = 8 * 30  # 8 months
 # --- New Feature Switch ---
 # Set to False to run a pure Discrete-Event Simulation without agent/LLM calls.
 # This is useful for quickly verifying the core timeline and scheduled events.
-LLM_ENABLED = False
+LLM_ENABLED = True
 
 # --- Stochastic Event Parameters ---
 # Average number of days between member-initiated questions
