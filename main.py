@@ -4,9 +4,7 @@ import openai
 import os
 import json
 from dotenv import load_dotenv
-from dspy.llms.google import Google
-
-# remove from dspy.llms.google import Google and add from langchain_google_genai import ChatGoogleGenerativeAI. AI!
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from models.state import SimulationState, MemberProfile
 from agents.modules import Agent, MemberAgent
