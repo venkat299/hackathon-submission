@@ -4,6 +4,11 @@ import datetime
 SIMULATION_START_DATE = datetime.datetime(2025, 1, 15)
 SIMULATION_DURATION_DAYS = 8 * 30  # 8 months
 
+# --- New Feature Switch ---
+# Set to False to run a pure Discrete-Event Simulation without agent/LLM calls.
+# This is useful for quickly verifying the core timeline and scheduled events.
+LLM_ENABLED = False
+
 # --- Stochastic Event Parameters ---
 # Average number of days between member-initiated questions
 # Based on "up to 5 conversations started by the member per week"
@@ -16,15 +21,17 @@ PLAN_ADHERENCE_PROBABILITY = 0.50
 MEMBER_PROFILE = {
     "name": "Rohan Patel",
     "age": 46,
-    "goals": """
-        Reduce risk of heart disease by maintaining healthy cholesterol and blood pressure. 
-        Enhance cognitive function and focus for sustained mental performance. 
-        Implement annual full-body health screenings for early detection. 
-    """,
+    "goals": [
+        "Reduce risk of heart disease by maintaining healthy cholesterol and blood pressure. ",
+        "Enhance cognitive function and focus for sustained mental performance. ",
+        "Implement annual full-body health screenings for early detection. "
+    ],
     "personality": "Analytical, driven, values efficiency and evidence-based approaches. Time-constrained, needs clear action plans.",
-    "health_conditions":"Manages borderline high blood pressure (hypertension).",
+    "health_conditions":["Manages borderline high blood pressure (hypertension)."],
     "wearables": "Garmin"
 }
+
+LOCS = ["UK", "US", "South Korea", "Jakarta"]
 
 # --- Agent Personas ---
 AGENT_PERSONAS = {
@@ -49,4 +56,4 @@ AGENT_PERSONAS = {
 
 # --- DSPy Configuration ---
 # Supported models: "gpt-4-turbo-preview" (OpenAI) or "gemini-pro" (Google)
-LLM_MODEL = "gemini-pro"
+LLM_MODEL = "gemini"
