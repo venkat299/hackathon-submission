@@ -15,7 +15,7 @@ from simulation.processes import (
     proactive_expert_process,
     state_update_process
 )
-from config import SIMULATION_DURATION_DAYS, MEMBER_PROFILE, LLM_MODEL, AGENT_PERSONAS
+from config import SIMULATION_DURATION_DAYS, MEMBER_PROFILE, LLM_MODEL, AGENT_PERSONAS, LOCS
 from utils import log_event
 
 class ClockUpdater:
@@ -33,8 +33,9 @@ class ClockUpdater:
 def setup_dspy():
     """Loads environment variables and configures DSPy settings."""
     load_dotenv()
+    # remove and add import dspy lm = dspy.LM("gemini/gemini-2.5-flash", api_key="YOUR_GEMINI_API_KEY") dspy.configure(lm=lm) AI!
     gemini = ChatGoogleGenerativeAI(
-        model="gemini-pro",
+        model="gemini",
         google_api_key=os.getenv("GOOGLE_API_KEY"),
         temperature=0.2
     )
@@ -53,7 +54,7 @@ def main():
     ClockUpdater(env, initial_state)
 
     # 2. Initialize agents
-    elyx_agent_names = AGENT_PERSONAS.keys()
+    elyx_agent_names = [name for name in AGENT_PERSONAS.keys() if name != "Rohan"]
     elyx_agents = {name: Agent(agent_name=name) for name in elyx_agent_names}
     member_agent = MemberAgent()
 
