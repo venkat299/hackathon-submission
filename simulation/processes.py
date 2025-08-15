@@ -160,6 +160,7 @@ def milestone_process(env, state):
 
 def proactive_expert_process(env, state, elyx_agents):
     """Embodies the proactive nature of the Elyx service by running enriched, data-driven checks daily."""
+    state.narrative_flags.setdefault('consultation_scheduled', False)
     while True:
         yield env.timeout(1) # Run once per day
         trigger_event, responder = None, None
@@ -178,18 +179,20 @@ def proactive_expert_process(env, state, elyx_agents):
             elif "Illness" in issue or "Pressure" in issue: responder = "Dr. Warren"
             elif "Indigestion" in issue: responder = "Carla"
             else: responder = "Dr. Warren"
-            trigger_event = f"""
-            CRITICAL HEALTH ALERT: Rohan is experiencing '{issue}'.
-            ANALYZE LIVE DATA: {json.dumps(live_data)}
-            TASK: Formulate a response that acknowledges his issue, interprets the data, provides a clear, actionable recommendation, and determines a next step (e.g., 'INITIATE_SICK_DAY_PROTOCOL', 'FLAG_FOR_EXPERT').
-            """
 
-        elif state.narrative_flags.pop('therapy_session_today', False):
-            responder = "Rachel"
-            trigger_event = (
-                "REMINDER: Rohan has a therapy session scheduled today."
-                " TASK: Send a supportive reminder and outline goals for the session."
-            )
+            if not state.narrative_flags.get('consultation_scheduled'):
+                trigger_event = f"""
+                CRITICAL HEALTH ALERT: Rohan is experiencing '{issue}'.
+                ANALYZE LIVE DATA: {json.dumps(live_data)}
+                TASK: Formulate a response that acknowledges his issue, interprets the data, provides a clear, actionable recommendation, and determines a next step (e.g., 'INITIATE_SICK_DAY_PROTOCOL', 'FLAG_FOR_EXPERT'). If you send a scheduling link, include an action to UPDATE_NARRATIVE_FLAG with flag 'consultation_scheduled' set to true.
+                """
+            else:
+                trigger_event = f"""
+                FOLLOW-UP: Rohan continues to experience '{issue}'.
+                ANALYZE LIVE DATA: {json.dumps(live_data)}
+                TASK: Offer guidance and support without sending any additional scheduling links.
+                """
+        
 
         elif last_event and last_event['type'] == 'POSITIVE_MILESTONE':
             responder = "Neel"
@@ -263,6 +266,7 @@ def proactive_expert_process(env, state, elyx_agents):
 
 def member_process(env, state, member_agent, elyx_agents, router):
     """Models the agency and behavior of the client, Rohan Patel."""
+    state.narrative_flags.setdefault('consultation_scheduled', False)
     # (This function is unchanged)
     yield env.timeout(0.1)
     while True:
@@ -286,7 +290,10 @@ def member_process(env, state, member_agent, elyx_agents, router):
             
             
             context_after_question = distill_context(state)
-            response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
+            trigger = f"Rohan asked: {prediction.question}"
+            if state.narrative_flags.get('consultation_scheduled'):
+                trigger += " Note: A consultation has already been scheduled, so avoid sending another scheduling link."
+            response_prediction = elyx_agents[responder](context=context_after_question, trigger=trigger)
             
             # --- USE ROBUST PARSER ---
             message, action = parse_llm_response(response_prediction.response)
