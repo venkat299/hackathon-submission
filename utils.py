@@ -22,7 +22,6 @@ def log_event(state, event_type: str, source: str, payload: dict):
     # Print in real-time for observation
     print(f"{timestamp_str} | {source}: {payload.get('content', json.dumps(payload))}")
 
-
 def distill_context(state, max_history: int = 15) -> str:
     """
     Creates a concise summary of the current state and recent history for the LLM.
@@ -32,23 +31,33 @@ def distill_context(state, max_history: int = 15) -> str:
 Current State (Day {state.current_day:.1f}):
 - Member: {state.member_profile.name}, Age: {state.member_profile.age}
 - Location: {state.logistics.location} {'(Traveling)' if state.logistics.is_traveling else ''}
-- Key Health Metrics: {json.dumps(state.health_data.lab_results)}
-- Wearable Status: {json.dumps(state.health_data.wearable_stream)}
+- Active Health Issues: {state.narrative_flags.get('active_issue', 'None')}
 - Current Goals: {'; '.join(state.member_profile.goals)}
 - Adherence: {state.intervention_plan.adherence_status}
 - Narrative Flags: {json.dumps(state.narrative_flags)}
 """
 
-    # 2. Get recent conversation history
-    recent_history = ""
-    if state.event_log:
-        # Filter for message events only
-        message_events = [event for event in state.event_log if event['type'] == 'MESSAGE']
-        last_events = message_events[-max_history:]
-        for event in last_events:
-            recent_history += f"- {event['source']}: {event['payload']['content']}\n"
+    # 2. --- NEW: Summarize critical recent DES events from the last day ---
+    critical_events_summary = ""
+    non_message_events = [
+        event for event in state.event_log
+        if event['type'] != 'MESSAGE' and (state.current_day - event['day']) <= 1.0
+    ]
+    if non_message_events:
+        critical_events_summary = "## CRITICAL RECENT EVENTS (Last 24 Hours) ##\n"
+        for event in non_message_events:
+            critical_events_summary += f"- Event: {event['type']}, Details: {json.dumps(event['payload'])}\n"
 
+    # 3. Get recent conversation history
+    recent_history = ""
+    message_events = [event for event in state.event_log if event['type'] == 'MESSAGE']
+    last_events = message_events[-max_history:]
+    for event in last_events:
+        recent_history += f"- {event['source']}: {event['payload']['content']}\n"
+
+    # 4. Assemble the full context
     full_context = f"""
+{critical_events_summary if critical_events_summary else ''}
 ## CONTEXT ##
 {state_summary}
 

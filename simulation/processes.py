@@ -128,8 +128,16 @@ def proactive_expert_process(env, state, elyx_agents):
         trigger_event, responder = None, None
         last_event = state.event_log[-1] if state.event_log else None
 
-        # --- HIGH PRIORITY TRIGGERS ---
-        if state.narrative_flags.get('active_issue'):
+        # --- NEW: Action-oriented onboarding logic for Ruby ---
+        # This is now the highest priority task to resolve the loop.
+        if state.narrative_flags.get('status') == "Onboarding" and not state.narrative_flags.get('onboarding_docs_sent'):
+            responder = "Ruby"
+            trigger_event = "Action: Send the onboarding documents and data request to Rohan."
+            # This is key: we immediately update the state to reflect the action is done.
+            state.narrative_flags['onboarding_docs_sent'] = True
+        
+        # --- HIGH PRIORITY TRIGGERS (Health issues, Milestones) ---
+        elif state.narrative_flags.get('active_issue'):
             issue = state.narrative_flags['active_issue']
             if "Strain" in issue: responder, trigger_event = "Rachel", f"Health Alert: Member has '{issue}'. Provide guidance."
             elif "Illness" in issue or "Pressure" in issue: responder, trigger_event = "Dr. Warren", f"Health Alert: Member has '{issue}'. Check symptoms."
@@ -191,8 +199,9 @@ def member_process(env, state, member_agent, elyx_agents, router): # Added 'rout
             
             # --- Semantic Routing Logic ---
             # Replace the entire if/elif block with a call to the AI router.
-            routing_prediction = router(question=prediction.question)
-            
+            # routing_prediction = router(question=prediction.question)
+            routing_prediction = router(question=prediction.question, conversation_history=distill_context(state))
+
             # Use the LLM's choice, with a safe fallback to Ruby.
             responder = routing_prediction.expert_name
             if responder not in elyx_agents:

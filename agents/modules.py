@@ -15,20 +15,26 @@ class GenerateMemberQuestion(dspy.Signature):
     question = dspy.OutputField(desc="A concise, in-character question or statement for the Elyx team.")
 
 class RouteQuestion(dspy.Signature):
-    """Given a user's question and a list of expert roles, choose the best expert to respond."""
-    question = dspy.InputField(desc="The user's question.")
+    """Given a user's question, recent conversation, and a list of expert roles, choose the best expert to respond."""
+    question = dspy.InputField(desc="The user's most recent question.")
+    # Add conversation history to the signature
+    conversation_history = dspy.InputField(desc="The last few messages in the conversation.")
     expert_roles = dspy.InputField(desc="A detailed list of available experts and their specific roles.")
-    expert_name = dspy.OutputField(desc="The single best expert name from the provided list (e.g., 'Dr. Warren', 'Carla').")
+    expert_name = dspy.OutputField(desc="The single best expert name from the provided list (e.g., 'Dr. Warren', 'Ruby').")
 
+# And update the Router module to pass this new information
 class Router(dspy.Module):
     def __init__(self, agent_names):
         super().__init__()
-        # Create a formatted string of expert roles to give the LLM context
         self.expert_roles = "\n".join([f"- {name}: {AGENT_PERSONAS[name]}" for name in agent_names])
         self.route = dspy.Predict(RouteQuestion)
 
-    def forward(self, question):
-        prediction = self.route(question=question, expert_roles=self.expert_roles)
+    def forward(self, question, conversation_history):
+        prediction = self.route(
+            question=question,
+            conversation_history=conversation_history, # Pass the history
+            expert_roles=self.expert_roles
+        )
         return prediction
     
 class Agent(dspy.Module):
