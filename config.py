@@ -50,5 +50,4 @@ AGENT_PERSONAS = {
 
 # --- DSPy Configuration ---
 # Supported models: "gpt-4-turbo-preview" (OpenAI) or "gemini-pro" (Google)
-# change this also AI
-LLM_MODEL = "gemini"
+LLM_MODEL = "google/gemma-3-12b"
