@@ -22,20 +22,14 @@ class ClockUpdater:
             self.state.current_day = self.env.now
             yield self.env.timeout(0.01)
 
-# ai 
-# import dspy
-# lm = dspy.LM("google/gemma-3-12b", api_base="http://192.168.0.127:1234", api_key="")
-# dspy.configure(lm=lm)
-# use locally hosted llm from lmstudio AI!
-
-
 def setup_dspy():
     load_dotenv()
-    gemini = dspy.LM(
-        model="gemini/gemini-2.5-flash",
-        api_key=os.getenv("GOOGLE_API_KEY")
+    lm = dspy.LM(
+        model="google/gemma-3-12b",
+        api_base="http://localhost:1234/v1",  # LM Studio uses /v1 endpoint
+        api_key=""  # No API key needed for local LM Studio
     )
-    dspy.configure(lm=gemini)
+    dspy.configure(lm=lm)
 
 def main():
     if LLM_ENABLED:
