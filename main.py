@@ -11,7 +11,14 @@ from simulation.processes import (
     timeline_process, member_process, proactive_expert_process,
     state_update_process, health_issues_process, milestone_process
 )
-from config import SIMULATION_DURATION_DAYS, MEMBER_PROFILE, AGENT_PERSONAS, LLM_ENABLED
+from config import (
+    SIMULATION_DURATION_DAYS,
+    MEMBER_PROFILE,
+    AGENT_PERSONAS,
+    LLM_ENABLED,
+    LLM_MODEL,
+    LLM_API_BASE,
+)
 from utils import log_event
 
 class ClockUpdater:
@@ -23,12 +30,14 @@ class ClockUpdater:
             yield self.env.timeout(0.01)
 
 def setup_dspy():
+    """Configure DSPy to use the locally hosted LM Studio server."""
     load_dotenv()
-    gemini = dspy.LM(
-        model="gemini/gemini-2.5-flash",
-        api_key=os.getenv("GOOGLE_API_KEY")
+    lm = dspy.OpenAI(
+        model=LLM_MODEL,
+        api_base=LLM_API_BASE,
+        api_key=os.getenv("OPENAI_API_KEY", "lm-studio"),
     )
-    dspy.configure(lm=gemini)
+    dspy.configure(lm=lm)
 
 def main():
     if LLM_ENABLED:

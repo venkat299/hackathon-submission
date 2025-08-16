@@ -49,5 +49,7 @@ AGENT_PERSONAS = {
 }
 
 # --- DSPy Configuration ---
-# Supported models: "gpt-4-turbo-preview" (OpenAI) or "gemini-pro" (Google)
-LLM_MODEL = "gemini"
+# Configuration for locally hosted LLM served via LM Studio
+LLM_MODEL = "google/gemma-3-12b"
+LLM_API_BASE = "http://192.168.0.127:1234/v1"
+
