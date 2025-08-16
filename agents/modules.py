@@ -3,15 +3,16 @@ from config import AGENT_PERSONAS
 
 class GenerateResponse(dspy.Signature):
     """
-    Given a persona, context, and a trigger, generate a conversational, in-character response.
-    The response should include a message for the user and, if necessary, a specific action for the simulation to execute.
+    Given a persona, context (including your own recent messages), and a trigger, generate a conversational, in-character response.
+    IMPORTANT: Review your own message history in the context to avoid repeating yourself.
+    Your output MUST be a flat JSON object with 'message' and 'action' as the top-level keys.
     """
     persona = dspy.InputField(desc="The persona description for the agent.")
-    context = dspy.InputField(desc="The current simulation state, critical events, and recent conversation history.")
+    context = dspy.InputField(desc="The current simulation state, critical events, and recent conversation history, including your own past messages.")
     trigger = dspy.InputField(desc="The specific event, data point, or message to respond to.")
     
     response = dspy.OutputField(
-        desc="A JSON object containing the response message and an optional action.",
+        desc="A flat JSON object containing 'message' and 'action' keys.",
         prefix='{"message": "',
         json_schema={
             "message": "A concise, WhatsApp-style message, typically under 50 words. Only provide a longer, more detailed explanation if the user asks for specifics or if a critical medical explanation is absolutely necessary.",
@@ -23,10 +24,13 @@ class GenerateResponse(dspy.Signature):
     )
 
 class GenerateMemberQuestion(dspy.Signature):
-    """Given the member's persona and context, generate a relevant, in-character question or comment."""
+    """
+    Given the member's persona and context (including your own recent questions), generate a relevant, in-character question or comment.
+    IMPORTANT: Review your own message history in the context to avoid asking the same thing repeatedly.
+    """
     persona = dspy.InputField(desc="The persona description for the member.")
-    context = dspy.InputField(desc="The current simulation state and recent conversation history.")
-    question = dspy.OutputField(desc="A concise, in-character question or statement for the Elyx team. IMPORTANT: The question must be brief, between 5 and 50 words.")
+    context = dspy.InputField(desc="The current simulation state and recent conversation history, including your own past questions.")
+    question = dspy.OutputField(desc="A concise, in-character question or statement for the Elyx team. IMPORTANT: The question must be brief, between 5 and 50 words, and should not repeat recent questions.")
 
 
 class RouteQuestion(dspy.Signature):

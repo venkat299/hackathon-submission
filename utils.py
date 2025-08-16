@@ -72,20 +72,29 @@ Current State (Day {state.current_day:.1f}):
 """
     return full_context
 
-# --- NEW ROBUST PARSER FUNCTION ---
 def parse_llm_response(raw_response: str) -> (str, dict):
     """
     Safely parses the LLM's response.
-    Handles both valid JSON and plain string fallbacks.
+    Handles valid JSON, nested JSON, markdown fences, and plain string fallbacks.
     Returns a tuple of (message, action).
     """
     try:
-        # Attempt to parse the full string as JSON
+        # Clean up the raw response by removing markdown fences
+        if "```json" in raw_response:
+            raw_response = raw_response.split("```json")[1].split("```")[0].strip()
+        elif "```" in raw_response:
+            raw_response = raw_response.split("```")[1].strip()
+
         response_obj = json.loads(raw_response)
+        
+        # Handle the case where the entire response is nested under a "response" key
+        if "response" in response_obj and isinstance(response_obj["response"], dict):
+            response_obj = response_obj["response"]
+
         message = response_obj.get("message", "")
         action = response_obj.get("action", {"type": "NONE"})
+
         return message, action
-    except (json.JSONDecodeError, AttributeError, TypeError):
+    except (json.JSONDecodeError, AttributeError, TypeError, IndexError):
         # If parsing fails, assume the entire raw response is the message
-        # and there is no action.
-        return raw_response, {"type": "NONE"}
+        return raw_response.strip(), {"type": "NONE"}
