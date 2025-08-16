@@ -25,9 +25,9 @@ class ClockUpdater:
 def setup_dspy():
     load_dotenv()
     lm = dspy.LM(
-        model="google/gemma-3-12b",
-        api_base="http://localhost:11434",  # LM Studio uses /v1 endpoint
-        api_key=""  # No API key needed for local LM Studio
+        model="openai/google/gemma-3-12b",
+        base_url="http://192.168.0.127:1234/v1",  # LM Studio uses /v1 endpoint
+        api_key="ngv"  # No API key needed for local LM Studio
     )
     dspy.configure(lm=lm)
 # lm = dspy.LM("ollama_chat/llama3.2:1b", api_base="http://localhost:11434", api_key="")
