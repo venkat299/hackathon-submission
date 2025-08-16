@@ -1,0 +1,3 @@
+This application simulates personalized healthcare interactions.
+It combines a discrete-event simulation with language model agents to generate synthetic medical event logs and explore member experiences.
+Its objective is to model how experts and a member collaborate over time to manage health goals and produce rich, structured datasets.
