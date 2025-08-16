@@ -29,6 +29,11 @@ def setup_dspy():
         base_url="http://192.168.0.127:1234/v1",  # LM Studio uses /v1 endpoint
         api_key="ngv"  # No API key needed for local LM Studio
     )
+    # gemini = dspy.LM(
+    #     model="gemini/gemini-2.5-flash",
+    #     api_key=os.getenv("GOOGLE_API_KEY")
+    # )
+    dspy.configure(lm=gemini)
     dspy.configure(lm=lm)
 # lm = dspy.LM("ollama_chat/llama3.2:1b", api_base="http://localhost:11434", api_key="")
 # dspy.configure(lm=lm)
