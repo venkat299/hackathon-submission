@@ -1,3 +1,4 @@
+# venkat299/med-data-generation/med-data-generation-iter-7/utils.py
 import json
 from config import SIMULATION_START_DATE
 import datetime
@@ -78,23 +79,50 @@ def parse_llm_response(raw_response: str) -> (str, dict):
     Handles valid JSON, nested JSON, markdown fences, and plain string fallbacks.
     Returns a tuple of (message, action).
     """
+    message = ""
+    action = {"type": "NONE"}
+
+    if not isinstance(raw_response, str):
+        raw_response = str(raw_response)
+
     try:
         # Clean up the raw response by removing markdown fences
-        if "```json" in raw_response:
-            raw_response = raw_response.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw_response:
-            raw_response = raw_response.split("```")[1].strip()
+        clean_response = raw_response.strip()
+        # print("clean_response", clean_response)
+        if clean_response.startswith("```json"):
+            clean_response = clean_response.split("```json", 1)[1].split("```")[0].strip()
+        elif clean_response.startswith("```"):
+            clean_response = clean_response.split("```", 1)[1].split("```")[0].strip()
 
-        response_obj = json.loads(raw_response)
-        
-        # Handle the case where the entire response is nested under a "response" key
-        if "response" in response_obj and isinstance(response_obj["response"], dict):
-            response_obj = response_obj["response"]
+        response_obj = json.loads(clean_response)
 
-        message = response_obj.get("message", "")
-        action = response_obj.get("action", {"type": "NONE"})
+        # After loading, it MUST be a dictionary to proceed.
+        if isinstance(response_obj, dict):
+            # Handle the case where the entire response is nested under a "response" key
+            if "response" in response_obj and isinstance(response_obj.get("response"), dict):
+                response_obj = response_obj["response"]
 
-        return message, action
+            message = response_obj.get("message", "")
+            action = response_obj.get("action", {"type": "NONE"})
+            
+            # Final check to ensure action is a dict, not some other JSON type
+            if not isinstance(action, dict):
+                action = {"type": "NONE"}
+        else:
+            # It parsed as valid JSON, but not an object (e.g., a string, number, or list)
+            # In this case, the whole thing is the message.
+            message = str(response_obj)
+            action = {"type": "NONE"}
+
     except (json.JSONDecodeError, AttributeError, TypeError, IndexError):
-        # If parsing fails, assume the entire raw response is the message
-        return raw_response.strip(), {"type": "NONE"}
+        # If parsing fails at any point, assume the entire raw response is the message
+        message = raw_response.strip()
+        action = {"type": "NONE"}
+
+    # One final safety net to ensure the return types are always correct
+    if not isinstance(message, str):
+        message = str(message).strip()
+    if not isinstance(action, dict):
+        action = {"type": "NONE"}
+
+    return message, action
