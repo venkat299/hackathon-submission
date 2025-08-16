@@ -199,7 +199,7 @@ def proactive_expert_process(env, state, elyx_agents):
             state.intervention_plan.adherence_status = "ON_TRACK"
 
         if trigger_event and responder:
-            context = distill_context(state)
+            context = distill_context(state, responder)
             try:
                 prediction = elyx_agents[responder](context=context, trigger=trigger_event)
                 
@@ -208,6 +208,10 @@ def proactive_expert_process(env, state, elyx_agents):
 
                 if message:
                     log_event(state, "MESSAGE", responder, {"content": message})
+                    if responder not in state.agent_memory:
+                        state.agent_memory[responder] = []
+                    state.agent_memory[responder].append(message)
+                    state.agent_memory[responder] = state.agent_memory[responder][-5:] # Keep last 5
 
                 if action and action.get("type") != "NONE":
                     log_event(state, "ACTION_EXECUTED", f"{responder}_AGENT", {"action": action})
@@ -224,10 +228,15 @@ def member_process(env, state, member_agent, elyx_agents, router):
     while True:
         time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
         yield env.timeout(time_to_next_question)
-        context = distill_context(state)
+        context = distill_context(state, "Rohan")
         try:
             prediction = member_agent(context=context)
             log_event(state, "MESSAGE", "Rohan", {"content": prediction.question})
+            if "Rohan" not in state.agent_memory:
+                state.agent_memory["Rohan"] = []
+            state.agent_memory["Rohan"].append(prediction.question)
+            state.agent_memory["Rohan"] = state.agent_memory["Rohan"][-5:]
+            
             yield env.timeout(random.uniform(0.01, 0.1))
             
             # Use a simpler context for the lightweight router
@@ -241,7 +250,7 @@ def member_process(env, state, member_agent, elyx_agents, router):
             log_event(state, "ROUTING", "SIM_CORE", {"question": prediction.question, "routed_to": responder, "method": "semantic_llm"})
             
             
-            context_after_question = distill_context(state)
+            context_after_question = distill_context(state, responder)
             response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
             
             # --- USE ROBUST PARSER ---
@@ -249,6 +258,10 @@ def member_process(env, state, member_agent, elyx_agents, router):
             
             if message:
                 log_event(state, "MESSAGE", responder, {"content": message})
+                if responder not in state.agent_memory:
+                    state.agent_memory[responder] = []
+                state.agent_memory[responder].append(message)
+                state.agent_memory[responder] = state.agent_memory[responder][-5:]
 
             if action and action.get("type") != "NONE":
                 log_event(state, "ACTION_EXECUTED", f"{responder}_AGENT", {"action": action})
@@ -269,42 +282,3 @@ def state_update_process(env, state):
         base_recovery = 70 - (20 if state.logistics.is_traveling else 0)
         recovery_noise = random.uniform(-15, 15)
         state.health_data.wearable_stream['recovery_score'] = max(0, min(100, round((base_recovery + recovery_noise) * vital_modifier)))
-
-# def member_process(env, state, member_agent, elyx_agents, router): # Added 'router'
-#     """Models the agency and behavior of the client, Rohan Patel."""
-#     yield env.timeout(0.1)
-    
-#     while True:
-#         time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
-#         yield env.timeout(time_to_next_question)
-
-#         context = distill_context(state)
-#         try:
-#             prediction = member_agent(context=context)
-#             log_event(state, "MESSAGE", "Rohan", {"content": prediction.question})
-
-#             yield env.timeout(random.uniform(0.01, 0.1))
-#             context_after_question = distill_context(state)
-            
-#             # --- Semantic Routing Logic ---
-#             # Replace the entire if/elif block with a call to the AI router.
-#             # routing_prediction = router(question=prediction.question)
-#             routing_prediction = router(question=prediction.question, conversation_history=distill_context(state))
-
-#             # Use the LLM's choice, with a safe fallback to Ruby.
-#             responder = routing_prediction.expert_name
-#             if responder not in elyx_agents:
-#                 responder = "Ruby" # Default if the LLM hallucinates a name
-
-#             # Add a log event to see the routing decision!
-#             log_event(state, "ROUTING", "SIM_CORE", {
-#                 "question": prediction.question,
-#                 "routed_to": responder,
-#                 "method": "semantic_llm"
-#             })
-
-#             response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
-#             log_event(state, "MESSAGE", responder, {"content": response_prediction.response})
-
-#         except Exception as e:
-#             log_event(state, "ERROR", "MEMBER_AGENT", {"error": str(e)})

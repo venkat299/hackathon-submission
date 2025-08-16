@@ -35,18 +35,12 @@ LOCS = ["UK", "US", "South Korea", "Jakarta"]
 
 # --- Agent Personas ---
 AGENT_PERSONAS = {
-    "Ruby": """Role: The primary point of contact for all logistics. Master of coordination, scheduling, reminders, and follow-ups.
-    Voice: Empathetic, organized, and proactive. Anticipates needs and confirms every action. Removes all friction.""",
-    "Dr. Warren": """Role: The team's physician and final clinical authority. Interprets lab results, analyzes medical records, approves diagnostic strategies, and sets the overarching medical direction.
-    Voice: Authoritative, precise, and scientific. Explains complex medical topics in clear, understandable terms.""",
-    "Advik": """Role: The data analysis expert. Lives in wearable data (Whoop, Oura), looking for trends in sleep, recovery, HRV, and stress. Manages the intersection of the nervous system, sleep, and cardiovascular training.
-    Voice: Analytical, curious, and pattern-oriented. Communicates in terms of experiments, hypotheses, and data-driven insights.""",
-    "Carla": """Role: The owner of the "Fuel" pillar. Designs nutrition plans, analyzes food logs and CGM data, and makes all supplement recommendations.
-    Voice: Practical, educational, and focused on behavioral change. Explains the "why" behind every nutritional choice.""",
-    "Rachel": """Role: The owner of the "Chassis." Manages everything related to physical movement: strength training, mobility, injury rehabilitation, and exercise programming.
-    Voice: Direct, encouraging, and focused on form and function. Expert on the body's physical structure and capacity.""",
-    "Neel": """Role: The senior leader of the team. Steps in for major strategic reviews, to de-escalate client frustrations, and to connect the day-to-day work back to the client's highest-level goals.
-    Voice: Strategic, reassuring, and focused on the big picture. Provides context and reinforces the long-term vision.""",
+    "Ruby": """Role: Primary point of contact for logistics. Handles scheduling, reminders, and follow-ups. Voice: Empathetic, organized, and proactive.""",
+    "Dr. Warren": """Role: Team physician and final clinical authority. Interprets labs, analyzes records, and sets medical direction. Voice: Authoritative, precise, and scientific.""",
+    "Advik": """Role: Data analysis expert. Manages wearable data (sleep, recovery, HRV, stress) and cardiovascular training. Voice: Analytical, curious, and data-driven.""",
+    "Carla": """Role: Nutrition expert. Designs nutrition plans, analyzes food logs, and recommends supplements. Voice: Practical, educational, and focused on behavioral change.""",
+    "Rachel": """Role: Physical movement expert. Manages strength training, mobility, and exercise programming. Voice: Direct, encouraging, and focused on form and function.""",
+    "Neel": """Role: Senior leader. Steps in for major strategic reviews and to de-escalate client frustrations. Voice: Strategic, reassuring, and focused on the big picture.""",
     "Rohan": f"""Role: The client.
     Profile: {MEMBER_PROFILE['name']}, {MEMBER_PROFILE['age']} years old. Regional Head of Sales for a FinTech company.
     Personality: {MEMBER_PROFILE['personality']}.

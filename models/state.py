@@ -32,3 +32,4 @@ class SimulationState(BaseModel):
     event_log: List = Field(default_factory=list)
     # A simple key-value store for tracking narrative state
     narrative_flags: Dict[str, Any] = Field(default_factory=dict)
+    agent_memory: Dict[str, List[str]] = Field(default_factory=dict)

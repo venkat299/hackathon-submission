@@ -22,7 +22,7 @@ def log_event(state, event_type: str, source: str, payload: dict):
     # Print in real-time for observation
     print(f"{timestamp_str} | {source}: {payload.get('content', json.dumps(payload))}")
 
-def distill_context(state, max_history: int = 15) -> str:
+def distill_context(state, agent_name: str, max_history: int = 15) -> str:
     """
     Creates a concise summary of the current state and recent history for the LLM.
     """
@@ -55,13 +55,19 @@ Current State (Day {state.current_day:.1f}):
     for event in last_events:
         recent_history += f"- {event['source']}: {event['payload']['content']}\n"
 
-    # 4. Assemble the full context
+    # 4. Get this agent's own history
+    agent_history = "\n".join(state.agent_memory.get(agent_name, []))
+
+    # 5. Assemble the full context
     full_context = f"""
 {critical_events_summary if critical_events_summary else ''}
 ## CONTEXT ##
 {state_summary}
 
-## RECENT CONVERSATION HISTORY ##
+## YOUR ( {agent_name} ) RECENT MESSAGES ##
+{agent_history if agent_history else "You have not sent any messages recently."}
+
+## OVERALL RECENT CONVERSATION ##
 {recent_history if recent_history else "No recent conversation."}
 """
     return full_context
