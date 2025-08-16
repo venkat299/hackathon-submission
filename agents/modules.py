@@ -14,7 +14,7 @@ class GenerateResponse(dspy.Signature):
         desc="A JSON object containing the response message and an optional action.",
         prefix='{"message": "',
         json_schema={
-            "message": "A natural, in-character WhatsApp-style message for the user. IMPORTANT: The message must be concise, between 5 and 50 words.",
+            "message": "A concise, WhatsApp-style message, typically under 50 words. Only provide a longer, more detailed explanation if the user asks for specifics or if a critical medical explanation is absolutely necessary.",
             "action": {
                 "type": "The type of action to take (e.g., 'INITIATE_SICK_DAY_PROTOCOL', 'FLAG_FOR_EXPERT', 'UPDATE_NARRATIVE_FLAG'). Can be 'NONE'.",
                 "payload": "A dictionary with data for the action (e.g., {'expert_name': 'Dr. Warren'}, {'flag': 'consult_scheduled', 'value': true})."
