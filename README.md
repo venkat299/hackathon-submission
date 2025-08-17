@@ -1,3 +1,15 @@
+# Med Data Generation
+
+A discrete-event simulation that models a personalized medical support program for a client. The project combines deterministic processes with stochastic events and large language model (LLM) agents to produce synthetic conversations, interventions and health data.
+
+## Features
+
+- **SimPy-based timeline** for scheduling onboarding, interventions and follow-up events.
+- **LLM-driven agents** that respond with role‑specific personas and generate member questions.
+- **Semantic router** to choose the appropriate expert for each member question.
+- **Configurable stochastic processes** for plan adherence, travel and health issues.
+- **Structured event logging** saved to `simulation_log.json` for downstream analysis.
+
 ## Communication Message Generation Methodology
 
 1. SimPy-driven timeline
@@ -27,18 +39,6 @@ Here’s what the visulaisation looks like:
 
 ![App Preview](visualization/visualisation2.png)
 ![App Preview](visualization/visualize1.png)
-
-# Med Data Generation
-
-A discrete-event simulation that models a personalized medical support program for a client. The project combines deterministic processes with stochastic events and large language model (LLM) agents to produce synthetic conversations, interventions and health data.
-
-## Features
-
-- **SimPy-based timeline** for scheduling onboarding, interventions and follow-up events.
-- **LLM-driven agents** that respond with role‑specific personas and generate member questions.
-- **Semantic router** to choose the appropriate expert for each member question.
-- **Configurable stochastic processes** for plan adherence, travel and health issues.
-- **Structured event logging** saved to `simulation_log.json` for downstream analysis.
 
 ## Repository Structure
 
