@@ -1,28 +1,8 @@
 import random
 from utils import log_event, distill_context, parse_llm_response
-from config import PLAN_ADHERENCE_PROBABILITY, AVG_DAYS_PER_MEMBER_QUESTION, LOCS
+from config import PLAN_ADHERENCE_PROBABILITY, AVG_DAYS_PER_MEMBER_QUESTION, LOCS, MEMBER_PROFILE
 import json
 
-def dialog_flow_process(env, state):
-    """
-    Observes conversations and intervenes if they become stuck in a loop.
-    """
-    yield env.timeout(1) # Delay start
-    while True:
-        yield env.timeout(0.5) # Check every 12 simulation hours
-
-        message_events = [event for event in state.event_log if event['type'] == 'MESSAGE']
-        if len(message_events) < 6: # Need at least 6 messages to detect a back and forth
-            continue
-
-        last_6_messages = message_events[-6:]
-        
-        # Check for a simple back and forth between two participants
-        participants = [msg['source'] for msg in last_6_messages]
-        if len(set(participants)) == 2 and participants[0] == participants[2] == participants[4] and participants[1] == participants[3] == participants[5]:
-            # Simple back and forth detected.
-            log_event(state, "DIALOG_INTERVENTION", "DIALOG_FLOW_AGENT", {"message": "The conversation seems to be stuck. Let's refocus. What is the next most important health priority?"})
-            
 def timeline_process(env, state):
     """Schedules all deterministic and periodic events based on the high-level plan."""
     # Initial onboarding
@@ -144,14 +124,37 @@ def milestone_process(env, state):
 
 def proactive_expert_process(env, state, elyx_agents):
     """Embodies the proactive nature of the Elyx service by running enriched, data-driven checks daily."""
+    days_deviated = 0
     while True:
         yield env.timeout(1) # Run once per day
         trigger_event, responder = None, None
         last_event = state.event_log[-1] if state.event_log else None
         live_data = state.health_data.wearable_stream
 
+        # --- Update Adherence Status ---
+        if random.random() > PLAN_ADHERENCE_PROBABILITY:
+            if state.intervention_plan.adherence_status == "ON_TRACK":
+                state.intervention_plan.adherence_status = "DEVIATED"
+                days_deviated = 1
+            else:
+                days_deviated += 1
+        else:
+            state.intervention_plan.adherence_status = "ON_TRACK"
+            days_deviated = 0
+        
         # --- ACTION-ORIENTED & HIGH-PRIORITY TRIGGERS ---
-        if state.narrative_flags.get('status') == "Onboarding" and not state.narrative_flags.get('onboarding_docs_sent'):
+        # **NEW** Travel Check-in Trigger
+        if last_event and last_event['type'] == 'TRAVEL_START' and not state.narrative_flags.get('travel_check_in_sent'):
+            responder = "Ruby"
+            trigger_event = f"""
+            TRAVEL CHECK-IN: Rohan has just started traveling to {state.logistics.location}.
+            TASK: Write a brief, proactive message to acknowledge his trip. Offer a practical, health-related tip for traveling (e.g., hydration, sleep) and wish him a safe journey.
+            """
+            state.narrative_flags['travel_check_in_sent'] = True
+        elif last_event and last_event['type'] == 'TRAVEL_END':
+            state.narrative_flags.pop('travel_check_in_sent', None)
+
+        elif state.narrative_flags.get('status') == "Onboarding" and not state.narrative_flags.get('onboarding_docs_sent'):
             responder = "Ruby"
             trigger_event = "Action: Send the onboarding documents and data request to Rohan."
             state.narrative_flags['onboarding_docs_sent'] = True
@@ -175,7 +178,28 @@ def proactive_expert_process(env, state, elyx_agents):
             TASK: As the team leader, write a strategic and reassuring message of congratulations. Connect this specific milestone back to his larger, long-term goals to reinforce the value of the program.
             """
         
-        # --- REGULAR, DATA-DRIVEN CHECK-INS ---
+        # --- RUBY'S LESS FREQUENT, DIVERSE TRIGGERS ---
+        elif days_deviated >= 3 and not state.narrative_flags.get('adherence_check_sent'):
+            responder = "Ruby"
+            trigger_event = f"""
+            PROACTIVE ADHERENCE CHECK-IN: The system flagged that Rohan may have deviated from the plan for a few days.
+            TASK: Write an empathetic, organized, and proactive message. Do not be accusatory. Gently check in and ask if there are any logistical barriers or scheduling issues you can help with to get him back on track.
+            """
+            state.narrative_flags['adherence_check_sent'] = True
+        elif days_deviated == 0:
+             state.narrative_flags.pop('adherence_check_sent', None)
+
+
+        elif state.current_day > 0 and state.current_day % 45 < 1 and not state.narrative_flags.get('wellness_check_sent'):
+            responder = "Ruby"
+            trigger_event = f"""
+            PERIODIC WELLNESS CHECK-IN: It's been a while.
+            TASK: Write a brief, friendly, and open-ended message to check in on Rohan's general well-being. This is not about data or adherence, but about him as a person. Ask how he's feeling overall.
+            """
+            state.narrative_flags['wellness_check_sent_day'] = state.current_day
+
+
+        # --- REGULAR, DATA-DRIVEN CHECK-INS (Other Experts) ---
         elif live_data.get("recovery_score", 100) < 30:
             responder = "Advik"
             trigger_event = f"""
@@ -208,23 +232,15 @@ def proactive_expert_process(env, state, elyx_agents):
             TASK: Write a strategic, big-picture message to Rohan. Acknowledge the milestone and connect the team's day-to-day work back to his highest-level goals. Reassure him of the long-term vision.
             """
 
-        elif random.random() > PLAN_ADHERENCE_PROBABILITY:
-             if state.intervention_plan.adherence_status == "ON_TRACK":
-                state.intervention_plan.adherence_status = "DEVIATED"
-                responder = "Ruby"
-                trigger_event = f"""
-                PROACTIVE ADHERENCE CHECK-IN: The system flagged that Rohan may have deviated from the plan.
-                TASK: Write an empathetic, organized, and proactive message. Do not be accusatory. Gently check in and ask if there are any logistical barriers or scheduling issues you can help with to get him back on track.
-                """
-        else:
-            state.intervention_plan.adherence_status = "ON_TRACK"
-
         if trigger_event and responder:
+            # Reset the wellness check flag to allow it in the next cycle
+            if 'wellness_check_sent_day' in state.narrative_flags and state.current_day > state.narrative_flags['wellness_check_sent_day']:
+                state.narrative_flags.pop('wellness_check_sent_day', None)
+            
             context = distill_context(state, responder)
             try:
                 prediction = elyx_agents[responder](context=context, trigger=trigger_event)
                 
-                # --- USE ROBUST PARSER ---
                 message, action = parse_llm_response(prediction.response)
 
                 if message:
@@ -232,62 +248,106 @@ def proactive_expert_process(env, state, elyx_agents):
                     if responder not in state.agent_memory:
                         state.agent_memory[responder] = []
                     state.agent_memory[responder].append(message)
-                    state.agent_memory[responder] = state.agent_memory[responder][-5:] # Keep last 5
+                    state.agent_memory[responder] = state.agent_memory[responder][-5:]
 
                 if action and action.get("type") != "NONE":
                     log_event(state, "ACTION_EXECUTED", f"{responder}_AGENT", {"action": action})
                     if action["type"] == "UPDATE_NARRATIVE_FLAG":
-                        state.narrative_flags[action["payload"]["flag"]] = action["payload"]["value"]
+                        state.narrative_flags[action["payload"]["flag"]] = action.get("payload", {})
 
             except Exception as e:
                 log_event(state, "ERROR", f"{responder}_AGENT", {"error": str(e)})
 
 def member_process(env, state, member_agent, elyx_agents, router):
-    """Models the agency and behavior of the client, Rohan Patel."""
-    # (This function is unchanged)
+    """
+    Models Rohan's behavior. He can either reply to a recent message
+    or proactively initiate a new conversation.
+    """
     yield env.timeout(0.1)
     while True:
-        time_to_next_question = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
-        yield env.timeout(time_to_next_question)
+        time_to_next_action = random.expovariate(1.0 / AVG_DAYS_PER_MEMBER_QUESTION)
+        yield env.timeout(time_to_next_action)
+
         context = distill_context(state, "Rohan")
+        last_event = state.event_log[-1] if state.event_log else None
+        
+        should_reply = False
+        if last_event and last_event['type'] == 'MESSAGE' and last_event['source'] != 'Rohan':
+            last_rohan_message_day = -1
+            for event in reversed(state.event_log):
+                if event['source'] == 'Rohan':
+                    last_rohan_message_day = event['day']
+                    break
+            if last_event['day'] > last_rohan_message_day:
+                should_reply = True
+
         try:
-            prediction = member_agent(context=context)
-            log_event(state, "MESSAGE", "Rohan", {"content": prediction.question})
-            if "Rohan" not in state.agent_memory:
-                state.agent_memory["Rohan"] = []
-            state.agent_memory["Rohan"].append(prediction.question)
-            state.agent_memory["Rohan"] = state.agent_memory["Rohan"][-5:]
-            
-            yield env.timeout(random.uniform(0.01, 0.1))
-            
-            # Use a simpler context for the lightweight router
-            conv_history = "\n".join([f"- {evt['source']}: {evt['payload']['content']}" for evt in state.event_log if evt['type'] == 'MESSAGE'][-5:])
-            routing_prediction = router(question=prediction.question, conversation_history=conv_history)
-            
-            responder = routing_prediction.expert_name
-            if responder not in elyx_agents:
-                responder = "Ruby"
+            if should_reply:
+                # --- BEHAVIOR 1: GENERATE A REPLY ---
+                last_message_content = last_event['payload']['content']
+                last_message_source = last_event['source']
+                
+                prediction = member_agent.reply(context=context, last_message=last_message_content)
+                raw_json = prediction.reply
+                reply_text = ""
+                try:
+                    reply_text = json.loads(raw_json).get("reply", raw_json)
+                except (json.JSONDecodeError, AttributeError):
+                    reply_text = raw_json.strip()
 
-            log_event(state, "ROUTING", "SIM_CORE", {"question": prediction.question, "routed_to": responder, "method": "semantic_llm"})
+                if reply_text:
+                    log_event(state, "MESSAGE", "Rohan", {"content": reply_text, "in_reply_to": last_message_source})
+                    if "Rohan" not in state.agent_memory:
+                        state.agent_memory["Rohan"] = []
+                    state.agent_memory["Rohan"].append(reply_text)
+                    state.agent_memory["Rohan"] = state.agent_memory["Rohan"][-5:]
             
-            
-            context_after_question = distill_context(state, responder)
-            response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {prediction.question}")
-            
-            # --- USE ROBUST PARSER ---
-            message, action = parse_llm_response(response_prediction.response)
-            
-            if message:
-                log_event(state, "MESSAGE", responder, {"content": message})
-                if responder not in state.agent_memory:
-                    state.agent_memory[responder] = []
-                state.agent_memory[responder].append(message)
-                state.agent_memory[responder] = state.agent_memory[responder][-5:]
+            else:
+                # --- BEHAVIOR 2: INITIATE A NEW QUESTION (Original Logic) ---
+                prediction = member_agent(context=context)
+                raw_json = prediction.question
+                question_text = ""
+                try:
+                    question_text = json.loads(raw_json).get("question", raw_json)
+                except (json.JSONDecodeError, AttributeError):
+                    question_text = raw_json.strip()
 
-            if action and action.get("type") != "NONE":
-                log_event(state, "ACTION_EXECUTED", f"{responder}_AGENT", {"action": action})
-                if action["type"] == "UPDATE_NARRATIVE_FLAG":
-                    state.narrative_flags[action["payload"]["flag"]] = action["payload"]["value"]
+                if not question_text:
+                    continue
+
+                log_event(state, "MESSAGE", "Rohan", {"content": question_text})
+                if "Rohan" not in state.agent_memory:
+                    state.agent_memory["Rohan"] = []
+                state.agent_memory["Rohan"].append(question_text)
+                state.agent_memory["Rohan"] = state.agent_memory["Rohan"][-5:]
+                
+                yield env.timeout(random.uniform(0.01, 0.1))
+                
+                conv_history = "\n".join([f"- {evt['source']}: {evt['payload']['content']}" for evt in state.event_log if evt['type'] == 'MESSAGE'][-5:])
+                routing_prediction = router(question=question_text, conversation_history=conv_history)
+                
+                responder = routing_prediction.expert_name
+                if responder not in elyx_agents:
+                    responder = "Ruby"
+
+                log_event(state, "ROUTING", "SIM_CORE", {"question": question_text, "routed_to": responder, "method": "semantic_llm"})
+                
+                context_after_question = distill_context(state, responder)
+                response_prediction = elyx_agents[responder](context=context_after_question, trigger=f"Rohan asked: {question_text}")
+                
+                message, action = parse_llm_response(response_prediction.response)
+                
+                if message:
+                    log_event(state, "MESSAGE", responder, {"content": message})
+                    if responder not in state.agent_memory:
+                        state.agent_memory[responder] = []
+                    state.agent_memory[responder].append(message)
+                    state.agent_memory[responder] = state.agent_memory[responder][-5:]
+
+                if action and action.get("type") != "NONE":
+                    log_event(state, "ACTION_EXECUTED", f"{responder}_AGENT", {"action": action})
+                    if action["type"] == "UPDATE_NARRATIVE_FLAG":
+                        state.narrative_flags[action["payload"]["flag"]] = action.get("payload", {})
 
         except Exception as e:
             log_event(state, "ERROR", "MEMBER_AGENT", {"error": str(e)})
@@ -303,3 +363,69 @@ def state_update_process(env, state):
         base_recovery = 70 - (20 if state.logistics.is_traveling else 0)
         recovery_noise = random.uniform(-15, 15)
         state.health_data.wearable_stream['recovery_score'] = max(0, min(100, round((base_recovery + recovery_noise) * vital_modifier)))
+
+def dialog_flow_process(env, state):
+    """
+    Observes conversations for topic stagnation and intervenes to redirect the conversation
+    towards the member's broader goals.
+    """
+    topic_keywords = {
+        "heart_health": ["cholesterol", "blood pressure", "heart", "cardio"],
+        "cognitive_function": ["cognitive", "focus", "mental performance", "brain"],
+        "screenings": ["screening", "full-body", "detection", "test"],
+    }
+    last_intervention_day = -10 # Cooldown to prevent spamming interventions
+    
+    yield env.timeout(1) # Delay start
+    while True:
+        yield env.timeout(0.5) # Check every 12 simulation hours
+
+        if state.current_day - last_intervention_day < 3: # 3-day cooldown
+            continue
+
+        rohan_messages = [
+            event['payload']['content'] for event in state.event_log 
+            if event['source'] == 'Rohan'
+        ][-3:] # Look at last 3 questions
+
+        if len(rohan_messages) < 3:
+            continue
+
+        stalled_topic = None
+        message_topics = []
+
+        for msg in rohan_messages:
+            msg_topic = "general"
+            for topic, keywords in topic_keywords.items():
+                if any(keyword in msg.lower() for keyword in keywords):
+                    msg_topic = topic
+                    break
+            message_topics.append(msg_topic)
+
+        # Check if the last 3 questions were about the same non-general topic
+        if len(set(message_topics)) == 1 and message_topics[0] != "general":
+            stalled_topic = message_topics[0]
+        
+        if stalled_topic:
+            # Identify a different goal to pivot to
+            all_goals = list(MEMBER_PROFILE['goals'])
+            stalled_goal_phrase = None
+            
+            if "heart" in stalled_topic: stalled_goal_phrase = "heart disease"
+            elif "cognitive" in stalled_topic: stalled_goal_phrase = "cognitive function"
+            elif "screening" in stalled_topic: stalled_goal_phrase = "health screenings"
+            
+            # Find a goal that is NOT the stalled one
+            next_goal_suggestion = "another of your health priorities"
+            for goal in all_goals:
+                if stalled_goal_phrase and stalled_goal_phrase not in goal:
+                    next_goal_suggestion = f"your goal of '{goal.strip()}'"
+                    break
+
+            intervention_message = (
+                f"I've noticed our conversation is focused on {stalled_topic.replace('_', ' ')}. "
+                f"To ensure we're making progress on all fronts, shall we pivot to {next_goal_suggestion}?"
+            )
+            
+            log_event(state, "DIALOG_INTERVENTION", "DIALOG_FLOW_AGENT", {"message": intervention_message})
+            last_intervention_day = state.current_day

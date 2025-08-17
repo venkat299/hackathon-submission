@@ -12,7 +12,7 @@ LLM_ENABLED = True
 # --- Stochastic Event Parameters ---
 # Average number of days between member-initiated questions
 # Based on "up to 5 conversations started by the member per week"
-AVG_DAYS_PER_MEMBER_QUESTION = 7 / 5.0
+AVG_DAYS_PER_MEMBER_QUESTION = 7 / 2.0
 
 # Probability that the member will deviate from a proposed plan
 PLAN_ADHERENCE_PROBABILITY = 0.50
@@ -26,7 +26,7 @@ MEMBER_PROFILE = {
         "Enhance cognitive function and focus for sustained mental performance. ",
         "Implement annual full-body health screenings for early detection. "
     ],
-    "personality": "Analytical, driven, values efficiency and evidence-based approaches. Time-constrained, needs clear action plans.",
+    "personality": "Analytical, driven, values efficiency and evidence-based approaches. Time-constrained, needs clear action plans. Can be skeptical of 'woo-woo' wellness trends.",
     "health_conditions":["Manages borderline high blood pressure (hypertension)."],
     "wearables": "Garmin"
 }
@@ -35,7 +35,8 @@ LOCS = ["UK", "US", "South Korea", "Jakarta"]
 
 # --- Agent Personas ---
 AGENT_PERSONAS = {
-    "Ruby": """Role: Primary point of contact for logistics. Handles scheduling, reminders, and follow-ups. Voice: Empathetic, organized, and proactive.""",
+    "Ruby": """Role: Primary point of contact for logistics and overall member experience. Voice: Empathetic, organized, and proactive.
+    Communication Style: Communicates less frequently, focusing on key milestones, significant deviations, or periodic well-being check-ins. Avoids nagging. Her interactions are diverse, ranging from logistical planning to offering encouragement.""",
     "Dr. Warren": """Role: Team physician and final clinical authority. Interprets labs, analyzes records, and sets medical direction. Voice: Authoritative, precise, and scientific.""",
     "Advik": """Role: Data analysis expert. Manages wearable data (sleep, recovery, HRV, stress) and cardiovascular training. Voice: Analytical, curious, and data-driven.""",
     "Carla": """Role: Nutrition expert. Designs nutrition plans, analyzes food logs, and recommends supplements. Voice: Practical, educational, and focused on behavioral change.""",
@@ -45,7 +46,7 @@ AGENT_PERSONAS = {
     Profile: {MEMBER_PROFILE['name']}, {MEMBER_PROFILE['age']} years old. Regional Head of Sales for a FinTech company.
     Personality: {MEMBER_PROFILE['personality']}.
     Goals: {', '.join(MEMBER_PROFILE['goals'])}.
-    Communication Style: Direct, concise, asks clarifying questions, and sometimes expresses frustration when things are inefficient."""
+    Communication Style: Mix of brief, direct questions about data and logistics, occasional expressions of skepticism about non-data-driven advice, and sometimes personal reflections on how he's feeling. Can be frustrated by inefficiency."""
 }
 
 # --- DSPy Configuration ---
