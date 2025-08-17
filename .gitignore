@@ -14,3 +14,6 @@ wheels/
 uv.lock
 simulation_log_des_only.json
 simulation_log.json
+structured_events.csv
+.gitignore
+structured_events.csv
