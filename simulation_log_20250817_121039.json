@@ -1,0 +1,506 @@
+[
+  {
+    "day": 0.0,
+    "timestamp": "01/15/25, 12:00 AM",
+    "type": "SIM_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "message": "Simulation starting."
+    }
+  },
+  {
+    "day": 0,
+    "timestamp": "01/15/25, 12:00 AM",
+    "type": "STATE_CHANGE",
+    "source": "SIM_CORE",
+    "payload": {
+      "status": "Onboarding started"
+    }
+  },
+  {
+    "day": 16.0,
+    "timestamp": "01/31/25, 12:00 AM",
+    "type": "POSITIVE_MILESTONE",
+    "source": "SIM_CORE",
+    "payload": {
+      "milestone": "Daily HRV surpassed 50!"
+    }
+  },
+  {
+    "day": 27.99,
+    "timestamp": "02/11/25, 11:45 PM",
+    "type": "STATE_CHANGE",
+    "source": "SIM_CORE",
+    "payload": {
+      "status": "Main intervention phase started"
+    }
+  },
+  {
+    "day": 29.99,
+    "timestamp": "02/13/25, 11:45 PM",
+    "type": "POSITIVE_MILESTONE",
+    "source": "SIM_CORE",
+    "payload": {
+      "milestone": "30 consecutive days of adherence!"
+    }
+  },
+  {
+    "day": 41.99,
+    "timestamp": "02/25/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 49.0,
+    "timestamp": "03/05/25, 12:00 AM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "UK"
+    }
+  },
+  {
+    "day": 56.0,
+    "timestamp": "03/12/25, 12:00 AM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 56.0,
+    "timestamp": "03/12/25, 12:00 AM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 70.0,
+    "timestamp": "03/26/25, 12:00 AM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 76.99,
+    "timestamp": "04/01/25, 11:45 PM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "US"
+    }
+  },
+  {
+    "day": 81.99,
+    "timestamp": "04/06/25, 11:45 PM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion",
+      "triggering_factors": {
+        "is_traveling": true,
+        "recovery_score": 50,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 5
+    }
+  },
+  {
+    "day": 83.99,
+    "timestamp": "04/08/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 83.99,
+    "timestamp": "04/08/25, 11:45 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 86.99,
+    "timestamp": "04/11/25, 11:45 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion"
+    }
+  },
+  {
+    "day": 89.99,
+    "timestamp": "04/14/25, 11:45 PM",
+    "type": "POSITIVE_MILESTONE",
+    "source": "SIM_CORE",
+    "payload": {
+      "milestone": "60 consecutive days of adherence!"
+    }
+  },
+  {
+    "day": 97.99,
+    "timestamp": "04/22/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 104.99,
+    "timestamp": "04/29/25, 11:45 PM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "US"
+    }
+  },
+  {
+    "day": 111.99,
+    "timestamp": "05/06/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 111.99,
+    "timestamp": "05/06/25, 11:45 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 117.99,
+    "timestamp": "05/12/25, 11:45 PM",
+    "type": "DIAGNOSTIC_TEST",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Quarterly diagnostic test panel initiated."
+    }
+  },
+  {
+    "day": 125.99,
+    "timestamp": "05/20/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 128.99,
+    "timestamp": "05/23/25, 11:45 PM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion",
+      "triggering_factors": {
+        "is_traveling": false,
+        "recovery_score": 60,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 4
+    }
+  },
+  {
+    "day": 132.99,
+    "timestamp": "05/27/25, 11:45 PM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "UK"
+    }
+  },
+  {
+    "day": 133.99,
+    "timestamp": "05/28/25, 11:45 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion"
+    }
+  },
+  {
+    "day": 139.99,
+    "timestamp": "06/03/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 139.99,
+    "timestamp": "06/03/25, 11:45 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 153.99,
+    "timestamp": "06/17/25, 11:45 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 161.0,
+    "timestamp": "06/25/25, 12:00 AM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "US"
+    }
+  },
+  {
+    "day": 165.0,
+    "timestamp": "06/29/25, 12:00 AM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Minor Illness (Cold/Flu)",
+      "triggering_factors": {
+        "is_traveling": true,
+        "recovery_score": 51,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 4
+    }
+  },
+  {
+    "day": 168.0,
+    "timestamp": "07/01/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 168.0,
+    "timestamp": "07/01/25, 11:59 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 170.0,
+    "timestamp": "07/03/25, 11:59 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Minor Illness (Cold/Flu)"
+    }
+  },
+  {
+    "day": 180.0,
+    "timestamp": "07/13/25, 11:59 PM",
+    "type": "POSITIVE_MILESTONE",
+    "source": "SIM_CORE",
+    "payload": {
+      "milestone": "90 consecutive days of adherence!"
+    }
+  },
+  {
+    "day": 182.0,
+    "timestamp": "07/15/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 189.0,
+    "timestamp": "07/22/25, 11:59 PM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Jakarta"
+    }
+  },
+  {
+    "day": 190.0,
+    "timestamp": "07/23/25, 11:59 PM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion",
+      "triggering_factors": {
+        "is_traveling": true,
+        "recovery_score": 55,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 3
+    }
+  },
+  {
+    "day": 190.0,
+    "timestamp": "07/23/25, 11:59 PM",
+    "type": "POSITIVE_MILESTONE",
+    "source": "SIM_CORE",
+    "payload": {
+      "milestone": "Daily HRV surpassed 55!"
+    }
+  },
+  {
+    "day": 194.0,
+    "timestamp": "07/27/25, 11:59 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Bout of Indigestion"
+    }
+  },
+  {
+    "day": 196.0,
+    "timestamp": "07/29/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 196.0,
+    "timestamp": "07/29/25, 11:59 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 206.0,
+    "timestamp": "08/08/25, 11:59 PM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Stress Headache",
+      "triggering_factors": {
+        "is_traveling": false,
+        "recovery_score": 77,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 2
+    }
+  },
+  {
+    "day": 208.0,
+    "timestamp": "08/10/25, 11:59 PM",
+    "type": "DIAGNOSTIC_TEST",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Quarterly diagnostic test panel initiated."
+    }
+  },
+  {
+    "day": 209.0,
+    "timestamp": "08/11/25, 11:59 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Stress Headache"
+    }
+  },
+  {
+    "day": 210.0,
+    "timestamp": "08/12/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 217.0,
+    "timestamp": "08/19/25, 11:59 PM",
+    "type": "TRAVEL_START",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "UK"
+    }
+  },
+  {
+    "day": 224.0,
+    "timestamp": "08/26/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 224.0,
+    "timestamp": "08/26/25, 11:59 PM",
+    "type": "TRAVEL_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "location": "Singapore"
+    }
+  },
+  {
+    "day": 224.0,
+    "timestamp": "08/26/25, 11:59 PM",
+    "type": "HEALTH_ISSUE",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Muscle Strain/Joint Pain",
+      "triggering_factors": {
+        "is_traveling": false,
+        "recovery_score": 40,
+        "adherence": "ON_TRACK"
+      },
+      "duration_days": 5
+    }
+  },
+  {
+    "day": 230.0,
+    "timestamp": "09/01/25, 11:59 PM",
+    "type": "HEALTH_ISSUE_RESOLVED",
+    "source": "SIM_CORE",
+    "payload": {
+      "issue": "Muscle Strain/Joint Pain"
+    }
+  },
+  {
+    "day": 238.0,
+    "timestamp": "09/09/25, 11:59 PM",
+    "type": "PLAN_UPDATE",
+    "source": "SIM_CORE",
+    "payload": {
+      "description": "Exercise plan updated."
+    }
+  },
+  {
+    "day": 240.0,
+    "timestamp": "09/11/25, 11:59 PM",
+    "type": "SIM_END",
+    "source": "SIM_CORE",
+    "payload": {
+      "message": "Simulation ended at day 240.00."
+    }
+  }
+]

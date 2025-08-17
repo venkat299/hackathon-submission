@@ -1,0 +1,147 @@
+--- WhatsApp Chat Log ---
+
+[01/15/25, 05:02 PM] Rohan: Given my goals, what's the most efficient initial step we can take?
+[01/15/25, 05:45 PM] Advik: Let's start with a 7-day HRV baseline. It gives us a good snapshot of your recovery and stress response, crucial for heart health and cognitive function. What do you think?
+[01/15/25, 11:45 PM] Ruby: Okay, I'm sending over the onboarding documents and data request now. Let me know if you have any questions!
+[01/16/25, 10:48 PM] Rohan: Thanks. Send them over. I'll review them briefly, but I need to see a clear timeline for implementation – and what data is *essential* upfront.
+[01/21/25, 12:00 AM] Ruby: Hi Rohan, just checking in! The system flagged a slight deviation. Everything alright? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track.
+[01/22/25, 05:31 AM] Rohan: Everything's fine. What 'deviation' are you referring to? And can you clarify what data the system is requesting?
+[01/23/25, 06:14 AM] Rohan: What specific data points are triggering this 'deviation' flag, and how do they relate to my goals?
+[01/23/25, 07:12 AM] Advik: It's primarily your resting heart rate variability (HRV), which indicates potential stress or reduced recovery. Lower HRV can impact both your heart health and cognitive function, aligning with your goals. Let's dig into the 7-day baseline data.
+[01/24/25, 01:12 AM] Rohan: Okay, let's see that data then. How long will the baseline take?
+[01/25/25, 12:00 AM] Ruby: Hi Rohan, just noticed a slight deviation. Everything okay? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[01/29/25, 12:00 AM] Ruby: Hi Rohan, just noticed a slight deviation. Everything okay? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[01/29/25, 04:33 AM] Rohan: What's the specific deviation? And what data are you looking for to get back 'on track'?
+[01/30/25, 12:00 AM] Dr. Warren: Rohan, your blood pressure spike is concerning. HRV of 46.9 and recovery score of 58 suggest increased stress. I'm initiating the sick day protocol to prioritize rest and recovery. Let’s reassess in 24 hours.
+[01/30/25, 05:02 PM] Rohan: Sick day protocol? What's the data you need from that, and how does it directly impact getting my blood pressure back under control?
+[01/31/25, 12:00 AM] Dr. Warren: Rohan, the live data confirms a concerning trend. HRV of 22.6 and recovery score of 39 indicate significant stress and reduced resilience. I'm escalating to a modified sick day protocol, prioritizing rest and close monitoring. Let’s reassess in 12 hours.
+[02/01/25, 12:00 AM] Dr. Warren: Rohan, the data confirms ongoing stress. HRV of 27.3 and recovery score of 41 require immediate action. I'm escalating to a modified sick day protocol with close monitoring. Let’s reassess in 6 hours.
+[02/01/25, 05:45 PM] Rohan: Six hours? That's a long time. What specific actions are being taken during this 'modified sick day protocol', and what data will I be providing in the interim?
+[02/01/25, 11:45 PM] Dr. Warren: Rohan, the ongoing blood pressure spike is concerning. HRV of 27.9 and recovery score of 47 confirm sustained stress. I'm escalating to a modified sick day protocol with enhanced monitoring and dietary adjustments. Let’s reassess in 4 hours.
+[02/03/25, 11:45 PM] Neel: Fantastic news, Rohan! Surpassing 50 HRV is a significant step towards reducing heart disease risk and enhancing cognitive function. Keep up the great work – this reinforces your long-term health goals.
+[02/06/25, 12:43 PM] Rohan: Good. Let's see if it holds.
+[02/07/25, 12:28 PM] Rohan: Given this constant tweaking, what's the *core* action I need to take consistently to improve my HRV?
+[02/07/25, 01:26 PM] Advik: Let's focus on consistent sleep hygiene. Aim for a regular bedtime and wake time, even on weekends. Small changes can significantly impact HRV over time.
+[02/11/25, 02:52 PM] Rohan: Consistent sleep hygiene... okay. What's the data you're tracking related to that, and what constitutes 'consistent' in a measurable way?
+[02/12/25, 11:45 PM] Carla: Hi Rohan! Given your focus on cognitive function, let's quickly review your food log for the past week. Any noticeable changes in diet since your travels?
+[02/14/25, 12:28 PM] Rohan: Travels? Minimal. Mostly hotel food, nothing significantly different from usual. What are you looking for specifically?
+[02/14/25, 11:45 PM] Ruby: Hi Rohan, I noticed a slight deviation. Everything alright? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[02/16/25, 02:09 PM] Rohan: No, not really. This constant adjustment is frustrating. What's the *one* thing I should be focusing on, and what data proves it works?
+[02/18/25, 05:02 PM] Rohan: Beyond sleep, what's the single most impactful lifestyle change I can make *right now* to demonstrably improve my HRV?
+[02/18/25, 06:28 PM] Advik: Considering your current situation, focused breathing exercises like box breathing could offer immediate HRV improvements. Data shows a correlation between consistent practice and enhanced recovery.
+[02/20/25, 04:19 PM] Rohan: Box breathing? Show me the data. What's the expected improvement, and how long until I see it?
+[02/24/25, 11:45 PM] Ruby: Hi Rohan, I noticed a slight deviation. Everything alright? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[02/25/25, 11:45 PM] Rachel: Hey Rohan, new plan's live! How are you feeling about the updated strength training focus? Any questions on proper squat form?
+[02/27/25, 02:52 PM] Rohan: Strength training? Fine. Send me the data on how this correlates to HRV improvement, and a quick video demonstrating proper squat form. I'm not wasting time with guesswork.
+[02/27/25, 04:19 PM] Rohan: Beyond HRV, what other biomarkers are most strongly linked to sustained cognitive performance?
+[02/27/25, 04:48 PM] Advik: Good question. Let's explore that! Beyond HRV, alpha-wave activity during rest and blood glucose regulation are key. I'm routing this to Advik for a deeper dive – he’s got the specifics.
+[02/28/25, 02:24 AM] Rohan: Okay, routing to Advik. Let's see what he has.
+[03/02/25, 12:00 AM] Carla: Rohan, your HRV is a bit low (49.3) despite a decent recovery score (63). Let's prioritize gut health – try incorporating ginger or peppermint tea today. I’m flagging this for a quick check-in with our nutritionist.
+[03/03/25, 12:00 AM] Carla: Ouch, Rohan! That indigestion flare-up is hitting hard – HRV down to 27.2 and recovery score at 36 is concerning. Let's focus on immediate relief: sip some peppermint tea and avoid trigger foods for now. I’m flagging this for a quick check-in with our nutritionist to adjust your plan.
+[03/04/25, 12:00 AM] Carla: Rohan, that indigestion is really impacting your HRV (28.2) and recovery (33). Focus on gentle digestion: peppermint tea & avoid triggers. I'm flagging this for a quick check-in with our nutritionist.
+[03/05/25, 12:00 AM] Ruby: Safe travels, Rohan! Staying hydrated on the go can really help with energy levels. Wishing you a smooth and healthy trip!
+[03/05/25, 05:16 AM] Rohan: Thanks, Ruby. Hydration is a given. More concerned about this ongoing indigestion messing with my HRV.
+[03/06/25, 12:00 AM] Carla: Rohan, that indigestion is still impacting your HRV (27.9) and recovery (32). Let's stick with gentle digestion: peppermint tea & trigger food avoidance. I’m flagging this for a quick check-in with our nutritionist.
+[03/22/25, 01:26 PM] Rohan: Beyond peppermint tea, what's the most evidence-based approach to address this persistent indigestion and its impact on my HRV?
+[03/22/25, 02:09 PM] Carla: Let's dig deeper. Beyond peppermint, consider a low-FODMAP diet trial to identify trigger foods impacting your gut & HRV. I'm flagging this for a nutritionist review.
+[03/23/25, 08:38 PM] Rohan: A low-FODMAP trial? Okay, send me the research backing that approach and a list of foods to eliminate. And how long do we run this trial before evaluating?
+[03/26/25, 12:00 AM] Rachel: Hey Rohan, seeing the plan update – how's that new strength focus feeling? Any tweaks needed on your squat form to maximize those benefits?
+[03/27/25, 12:00 AM] Ruby: Hi Rohan, just noticed a slight deviation. Everything okay? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[03/28/25, 02:38 AM] Rohan: It's the ongoing indigestion, Ruby. Focusing on that low-FODMAP trial for now. No logistical issues beyond that.
+[03/29/25, 05:16 AM] Rohan: What's the typical duration of a low-FODMAP trial, and what constitutes a 'successful' outcome in terms of HRV improvement?
+[03/29/25, 05:45 AM] Advik: Typically, a low-FODMAP trial lasts 2-6 weeks. Success is defined by HRV improvements (aiming for a consistent baseline above 50) and reduced digestive discomfort. We'll monitor closely!
+[04/01/25, 11:45 PM] Ruby: Safe travels, Rohan! Don't forget to prioritize sleep while you’re on the go – it can really impact your HRV. Wishing you a smooth and healthy trip!
+[04/08/25, 11:02 AM] Rohan: Thanks, Ruby. Sleep is definitely on the agenda. Focusing on that low-FODMAP trial first – hopefully, it addresses this indigestion and gets my HRV back on track.
+[04/08/25, 11:16 AM] Rohan: Given my travel schedule, is there a simplified version of the low-FODMAP elimination phase I can realistically implement?
+[04/08/25, 12:57 PM] Carla: Absolutely. We can focus on the most common triggers: garlic, onions, wheat, dairy. Eliminate those for a week while traveling and see if your HRV improves. We'll reassess upon your return.
+[04/09/25, 05:16 PM] Rohan: Regarding this simplified low-FODMAP trial, what's the most efficient way to track my HRV during this week?
+[04/09/25, 06:00 PM] Advik: Focus on your usual wearable – it's the easiest! Just ensure you’re consistently wearing it to capture HRV data throughout the week. We'll review trends upon your return.
+[04/11/25, 11:45 PM] Rachel: Hey Rohan, seeing that muscle strain/joint pain flare-up. HRV at 44.8 and recovery score at 69 – let's prioritize gentle movement today. Focus on mobility exercises, skip the strength training for now. Let’s reassess tomorrow.
+[04/12/25, 06:00 PM] Rohan: Right, thanks. Mobility exercises it is then. Will keep an eye on HRV and recovery score.
+[04/12/25, 11:45 PM] Rachel: Ouch, Rohan! That HRV of 23.8 and recovery score of 50 is concerning with the muscle strain/joint pain. Let's initiate a sick day protocol – prioritize rest and gentle stretching today. I’m flagging this for expert review.
+[04/13/25, 11:45 PM] Rachel: Rohan, that HRV of 28.5 and recovery score of 47 with the muscle strain/joint pain is concerning. Let's initiate a sick day protocol – prioritize rest and gentle stretching today. I’m flagging this for expert review.
+[04/14/25, 11:45 PM] Rachel: Rohan, that HRV of 31.6 and recovery score of 36 with the muscle strain/joint pain is still concerning. Let's continue prioritizing rest and gentle stretching today. I’m flagging this for expert review.
+[04/15/25, 11:45 PM] Rachel: Rohan, HRV at 33.3 and recovery score at 50 with that muscle strain/joint pain is still concerning. Let's continue prioritizing rest and gentle stretching today. I’m flagging this for expert review.
+[04/16/25, 09:21 PM] Rohan: Flagging for expert review is fine. Just want to ensure I'm not missing anything obvious with this ongoing HRV dip and muscle pain.
+[04/17/25, 03:50 AM] Rohan: Given this ongoing HRV dip and muscle pain, what specific biomarkers should I be most closely monitoring during expert review?
+[04/17/25, 05:16 AM] Advik: Beyond HRV, focus on alpha-wave activity during rest and blood glucose regulation. Advik is routing this for a deeper dive – he’s got the specifics!
+[04/18/25, 07:55 AM] Rohan: Okay, good to know. Alpha-wave activity and blood glucose – noted. Thanks for the heads up.
+[04/20/25, 02:38 AM] Rohan: Given this ongoing HRV dip, are there any immediate dietary adjustments I should consider beyond the low-FODMAP trial?
+[04/20/25, 04:04 AM] Carla: Let's explore! Magnesium-rich foods (spinach, nuts) might help with HRV & muscle function. Also, ensure adequate hydration – dehydration can impact both. I'm flagging this for a nutritionist review.
+[04/21/25, 06:14 AM] Rohan: Spinach and nuts, got it. Hydration – always a challenge when traveling. Appreciate the suggestions.
+[04/22/25, 11:45 PM] Rachel: Hey Rohan, plan updated! How's that new mobility routine feeling on your joints? Focusing on proper form?
+[04/25/25, 12:43 AM] Rohan: It's okay, thanks. A bit stiff, but I’m trying to be mindful of the form. Will keep an eye on how it impacts HRV.
+[04/27/25, 11:45 PM] Carla: Rohan, that's concerning with the indigestion flare-up and HRV at 46.5! Recovery is good (62), so focus on gentle digestion & hydration. Let's continue the low-FODMAP trial – is that going well? I’m flagging this for a quick check-in with our nutritionist.
+[04/28/25, 09:07 AM] Rohan: Low-FODMAP seems to be helping, yes. Will keep that up. Thanks.
+[04/28/25, 11:45 PM] Carla: Rohan, that HRV of 28.1 and recovery score of 36 with the indigestion is concerning. Let's continue focusing on gentle digestion and hydration while maintaining the low-FODMAP trial. I’m flagging this for a quick check-in with our nutritionist.
+[04/29/25, 11:45 PM] Ruby: Safe travels to Jakarta, Rohan! Staying hydrated on the go can really help with that indigestion. Wishing you a smooth and healthy trip!
+[04/30/25, 11:45 PM] Carla: Rohan, that HRV of 29.8 and recovery score of 32 with the indigestion isn't ideal. Continue focusing on gentle digestion & hydration while sticking to the low-FODMAP trial. I'm flagging this for a quick check-in with our nutritionist.
+[05/01/25, 11:45 PM] Carla: Rohan, that HRV of 25 and recovery score of 23 with the indigestion is concerning. Let's continue focusing on gentle digestion & hydration while sticking to the low-FODMAP trial. I’m flagging this for a quick check-in with our nutritionist.
+[05/05/25, 11:45 PM] Ruby: Hey Rohan, just seeing a slight deviation. Everything alright? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[05/11/25, 07:55 PM] Rohan: Given these ongoing HRV dips and indigestion, is there a specific timeframe I should expect feedback from the nutritionist?
+[05/11/25, 08:24 PM] Carla: The nutritionist will review this shortly – likely within 24-48 hours. I'll let you know as soon as I hear back!
+[05/14/25, 09:50 PM] Rohan: Given these fluctuations, what specific biomarkers should I prioritize tracking alongside HRV?
+[05/14/25, 10:48 PM] Advik: Good question! Alongside HRV, focus on sleep stages (deep & REM) and resting heart rate variability. These offer valuable insights into recovery.
+[05/21/25, 11:45 PM] Dr. Warren: Rohan, your HRV of 54.2 and recovery score of 66 suggest a positive trend despite the headache. Continue prioritizing rest and hydration. Let's reassess in 24 hours.
+[05/22/25, 11:45 PM] Dr. Warren: Rohan, the data confirms ongoing stress. HRV of 27.0 and recovery score of 43 require immediate action. I'm escalating to a modified sick day protocol with close monitoring. Let’s reassess in 6 hours.
+[05/23/25, 11:45 PM] Dr. Warren: Rohan, the ongoing headache and HRV of 32.0 with a recovery score of 42 indicate persistent stress. I'm escalating to a modified sick day protocol with enhanced monitoring and dietary adjustments. Let’s reassess in 4 hours.
+[05/24/25, 02:09 PM] Rohan: Four hours, got it. What dietary adjustments are we looking at?
+[05/24/25, 11:45 PM] Dr. Warren: Rohan, the data confirms ongoing stress and a worsening headache. HRV of 26.5 & recovery score of 39 require immediate action. I'm escalating to a modified sick day protocol with enhanced monitoring and dietary adjustments. Let’s reassess in 4 hours.
+[05/25/25, 11:45 PM] Dr. Warren: Rohan, the ongoing headache and HRV of 28.9 with a recovery score of 40 confirm sustained stress. I'm escalating to a modified sick day protocol with enhanced monitoring and dietary adjustments. Let’s reassess in 4 hours.
+[05/26/25, 08:24 AM] Rohan: Right. What adjustments are we talking about specifically?
+[05/26/25, 11:45 PM] Dr. Warren: Rohan, the data confirms ongoing stress and a worsening headache. HRV of 25 & recovery score of 38 require immediate action. I'm escalating to a modified sick day protocol with enhanced monitoring and dietary adjustments. Let’s reassess in 4 hours.
+[05/30/25, 07:55 PM] Rohan: Given these frequent protocol escalations, are we seeing a pattern or is this largely reactive to daily fluctuations?
+[05/30/25, 09:21 PM] Advik: Interesting question. It seems reactive, but let's analyze the escalation frequency and HRV trends over the next few days. I’ll flag this for deeper review.
+[06/03/25, 04:33 AM] Rohan: Okay, good. Let me know what you find.
+[06/11/25, 06:14 PM] Rohan: Beyond dietary changes, are there any specific supplements showing promise for HRV stabilization?
+[06/11/25, 08:09 PM] Carla: Let me check with our nutritionist on supplement recommendations for HRV. I'm prioritizing that request now!
+[06/12/25, 05:31 AM] Rohan: Okay, thanks. Let's get that information quickly.
+[06/14/25, 10:33 AM] Rohan: Given these frequent escalations, how much of this is truly preventable with proactive adjustments?
+[06/14/25, 11:31 AM] Advik: Good question. Let's analyze escalation frequency and HRV trends to identify potential proactive adjustments. I’ll flag this for deeper review alongside Advik's analysis.
+[06/18/25, 11:45 PM] Rachel: Hey Rohan! New plan's live. How are those glute bridges feeling today? Really focusing on squeezing your core?
+[06/24/25, 12:00 AM] Ruby: Hey Rohan, just seeing a slight deviation. Everything alright? Let me know if there are any logistical bumps or scheduling issues I can help with to get you back on track!
+[06/25/25, 12:00 AM] Ruby: Safe travels, Rohan! Staying hydrated on the go can really help with that indigestion. Wishing you a smooth and healthy trip!
+[06/27/25, 12:00 AM] Carla: Rohan, great HRV jump! Recovery score still a bit low at 39 with the indigestion. Keep focusing on gentle digestion & hydration – that's key while traveling. I’ll continue monitoring closely.
+[06/28/25, 12:00 AM] Carla: Rohan, that HRV of 28.4 and recovery score of 22 with the indigestion is concerning, especially while traveling. Let's double down on gentle digestion and hydration – consider bone broth or ginger tea. I’m flagging this for a quick check-in with our nutritionist.
+[06/29/25, 12:00 AM] Carla: Rohan, HRV up to 35.2 & recovery at 37 – good progress! Still focusing on gentle digestion with that indigestion, okay? I'm still flagging this for our nutritionist to review. Let’s keep it up!
+[06/29/25, 11:59 PM] Carla: HRV at 33.5 & recovery score of 23 with that indigestion – still a bit low while traveling. Keep focusing on gentle digestion & hydration! I'm still flagging this for our nutritionist to review.
+[06/30/25, 11:59 PM] Carla: Rohan, that indigestion is still impacting your HRV (33.1) & recovery (39). Gentle digestion and hydration are key! I'm still flagging this for our nutritionist. Let’s keep those strategies in place.
+[07/02/25, 11:59 PM] Rachel: Hey Rohan! New plan's live. How are those glute bridges feeling today? Really focusing on squeezing your core?
+[07/08/25, 04:33 PM] Rohan: Are they actually making a difference, or is this just another exercise?
+[07/09/25, 05:31 AM] Rohan: Given my travel schedule, what's the most impactful adjustment I can make to minimize HRV fluctuations?
+[07/09/25, 05:59 AM] Advik: Prioritize consistent sleep hygiene, even with travel disruptions. Aim for a regular bedtime and wake-up time to stabilize HRV.
+[07/09/25, 05:59 PM] Rohan: Okay, that's actionable. What specific strategies do you recommend for maintaining a regular sleep schedule given the time zone changes?
+[07/12/25, 08:52 AM] Rohan: Regarding sleep hygiene, what's the quickest way to adjust to a new time zone?
+[07/12/25, 09:07 AM] Advik: Advik's got this! He’s diving deeper into sleep hygiene strategies for time zone adjustments. Expect a detailed response soon!
+[07/15/25, 11:59 PM] Rachel: Hey Rohan! Plan updated. How's that new mobility routine feeling on your joints? Focusing on proper form?
+[07/16/25, 11:59 PM] Carla: Great recovery score, Rohan! HRV's up to 50.7 – that's fantastic progress despite the indigestion. Keep those gentle digestion strategies in place! I'm flagging this for our nutritionist to review.
+[07/17/25, 11:59 PM] Carla: Rohan, HRV at 33.3 & recovery score of 41 with that indigestion – still a bit low. Let's focus on gentle digestion & hydration, and I’m flagging this for our nutritionist to review. Let's keep those strategies in place!
+[07/18/25, 11:59 PM] Carla: Rohan, that indigestion is still impacting your HRV (33.6) & recovery (40). Gentle digestion and hydration are key! I'm flagging this for our nutritionist to review. Let’s keep those strategies in place!
+[07/20/25, 08:23 PM] Rohan: Given my travel, what's the *most* effective sleep strategy to minimize HRV dips?
+[07/20/25, 08:52 PM] Advik: Advik's on it! He’s deep-diving into sleep hygiene for time zone adjustments. Expect a detailed response soon!
+[07/21/25, 11:31 PM] Rohan: Okay, good. I need concrete recommendations, not just 'deep-diving'.
+[07/23/25, 11:59 PM] Neel: Fantastic, Rohan! Surpassing 55 HRV is a major win – it directly supports your heart health and cognitive goals. Keep those healthy habits strong as you continue to travel.
+[07/27/25, 03:50 PM] Rohan: Good. Let's track this closely and see if it holds up with the continued travel.
+[07/31/25, 04:19 AM] Rohan: Beyond sleep, what's the single biggest factor impacting my HRV fluctuations during travel?
+[07/31/25, 04:33 AM] Advik: Stress & dehydration are likely culprits. Let's monitor cortisol levels and ensure adequate hydration during travel to see if that stabilizes HRV.
+[08/01/25, 03:07 PM] Rohan: Okay, that makes sense. How will we monitor cortisol levels practically?
+[08/05/25, 09:21 PM] Rohan: Regarding cortisol, what's the simplest method for me to get a baseline reading?
+[08/05/25, 09:35 PM] Dr. Warren: A saliva cortisol test kit is the simplest option. We can send one over for convenient at-home testing.
+[08/07/25, 10:47 PM] Rohan: Okay, send it over. Let's get a baseline established quickly.
+[08/13/25, 08:23 PM] Rohan: With the saliva test on its way, what's the ideal time of day to take it for accuracy?
+[08/13/25, 10:04 PM] Dr. Warren: First thing in the morning, around 8 AM, is best for cortisol accuracy. Let me know when you receive it.
+[08/13/25, 11:59 PM] Rachel: {Hey Rohan! New plan's live. How are those glute bridges feeling today? Really focusing on squeezing your core?}
+[08/19/25, 10:47 PM] Rohan: They're fine. Is this about the new plan, or are you checking in on my glute bridges?
+[08/19/25, 11:59 PM] Ruby: Hey Rohan! Safe travels to the US. Staying hydrated on flights can really help combat jet lag – keep that water bottle handy! Wishing you a smooth and healthy trip!
+[08/21/25, 11:59 PM] Dr. Warren: HRV at 53 & recovery score of 42 despite the cold/flu. Let's continue with the modified sick day protocol, focusing on rest & hydration. I’m flagging for expert review to ensure optimal care.
+[08/22/25, 11:59 PM] Dr. Warren: Rohan, the HRV of 30.2 and recovery score of 32 confirm ongoing illness impact. Continuing the modified sick day protocol with enhanced rest and hydration is crucial. I'm flagging for expert review to ensure optimal care.
+[08/23/25, 11:59 PM] Dr. Warren: Rohan, the HRV of 30.5 and recovery score of 36 confirm ongoing illness impact. Continuing the modified sick day protocol with enhanced rest and hydration is crucial. I'm flagging for expert review.
+[08/24/25, 11:59 PM] Dr. Warren: HRV of 32.3 & recovery score of 24 confirm ongoing illness impact. Continuing the modified sick day protocol with enhanced rest & hydration is crucial. I'm flagging for expert review.
+[08/25/25, 05:31 PM] Rohan: Flagging for expert review? Okay. Let's ensure the recommendations are actionable and don’t disrupt my schedule too much.
+[08/26/25, 11:45 AM] Rohan: Given my travel schedule, how quickly can I expect actionable insights from the saliva test?
+[08/26/25, 01:40 PM] Advik: Advik's analyzing it now! Expect initial insights within 24-48 hours, factoring in travel & lab processing. We'll prioritize actionable recommendations ASAP.
+[09/01/25, 06:28 PM] Rohan: Beyond cortisol, what other saliva markers are you analyzing for cognitive performance?
+[09/01/25, 06:57 PM] Advik: We'll be looking at alpha-amylase and IgF-1, both linked to cognitive function & stress response. Lab processing takes time with travel factored in – expect initial insights within 24-48 hours!
+[09/03/25, 12:57 AM] Rohan: 24-48 hours, got it. Let's prioritize those actionable recommendations then.
+[09/09/25, 11:59 PM] Rachel: Hey Rohan! New plan's live. How are those glute bridges feeling today? Really focusing on squeezing your core?
+[09/11/25, 01:40 AM] Rohan: New plan, got it. Glute bridges are... functional. Let's see what the new recommendations are.

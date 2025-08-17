@@ -7,12 +7,12 @@ SIMULATION_DURATION_DAYS = 8 * 30  # 8 months
 # --- New Feature Switch ---
 # Set to False to run a pure Discrete-Event Simulation without agent/LLM calls.
 # This is useful for quickly verifying the core timeline and scheduled events.
-LLM_ENABLED = True
+LLM_ENABLED = False
 
 # --- Stochastic Event Parameters ---
 # Average number of days between member-initiated questions
 # Based on "up to 5 conversations started by the member per week"
-AVG_DAYS_PER_MEMBER_QUESTION = 7 / 2.0
+AVG_DAYS_PER_MEMBER_QUESTION = 7 / 5.0
 
 # Probability that the member will deviate from a proposed plan
 PLAN_ADHERENCE_PROBABILITY = 0.50
@@ -55,7 +55,7 @@ AGENT_PERSONAS = {
 LLM_PROVIDER = "local"  # "local" or "google"
 
 # --- Local LLM Configuration (e.g., LM Studio) ---
-LOCAL_LLM_MODEL = "openai/google/gemma-3-12b"#"openai/google/gemma-3-12b"
+LOCAL_LLM_MODEL = "openai/openai/gpt-oss-20b"# "openai/google/gemma-3-12b"
 LOCAL_LLM_BASE_URL = "http://192.168.0.127:1234/v1"
 LOCAL_LLM_API_KEY = "ngv"  # Not needed for local 
 
