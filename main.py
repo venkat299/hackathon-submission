@@ -11,7 +11,8 @@ from models.state import SimulationState, MemberProfile
 from agents.modules import Agent, MemberAgent, Router
 from simulation.processes import (
     timeline_process, member_process, proactive_expert_process,
-    state_update_process, health_issues_process, milestone_process
+    state_update_process, health_issues_process, milestone_process,
+    dialog_flow_process # Add this import
 )
 from config import (
     SIMULATION_DURATION_DAYS, MEMBER_PROFILE, AGENT_PERSONAS, LLM_ENABLED,
@@ -87,6 +88,7 @@ def main():
     env.process(state_update_process(env, initial_state))
     env.process(health_issues_process(env, initial_state))
     env.process(milestone_process(env, initial_state))
+    env.process(dialog_flow_process(env, initial_state)) # Add this line
 
     if LLM_ENABLED:
         print("--- Agent processes enabled with Semantic Routing. ---")

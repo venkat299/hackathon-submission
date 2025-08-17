@@ -3,8 +3,10 @@ from config import AGENT_PERSONAS
 
 class GenerateResponse(dspy.Signature):
     """
-    Given a persona, context (including your own recent messages), and a trigger, generate a conversational, in-character response.
-    IMPORTANT: Review your own message history in the context to avoid repeating yourself.
+    Generate a CONCISE, conversational, in-character response, like a WhatsApp message.
+    The response should be brief and to the point, typically under 50 words.
+    Avoid long explanations unless the user asks for details or it's a critical medical necessity.
+    Review your own message history in the context to avoid repeating yourself.
     Your output MUST be a flat JSON object with 'message' and 'action' as the top-level keys.
     """
     persona = dspy.InputField(desc="The persona description for the agent.")
@@ -15,7 +17,7 @@ class GenerateResponse(dspy.Signature):
         desc="A flat JSON object containing 'message' and 'action' keys.",
         prefix='{"message": "',
         json_schema={
-            "message": "A concise, WhatsApp-style message, typically under 50 words. Only provide a longer, more detailed explanation if the user asks for specifics or if a critical medical explanation is absolutely necessary.",
+            "message": "A very brief, WhatsApp-style message, under 50 words. Be direct. Do not provide long explanations unless explicitly asked or for critical medical reasons.",
             "action": {
                 "type": "The type of action to take (e.g., 'INITIATE_SICK_DAY_PROTOCOL', 'FLAG_FOR_EXPERT', 'UPDATE_NARRATIVE_FLAG'). Can be 'NONE'.",
                 "payload": "A dictionary with data for the action (e.g., {'expert_name': 'Dr. Warren'}, {'flag': 'consult_scheduled', 'value': true})."

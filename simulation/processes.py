@@ -2,6 +2,27 @@ import random
 from utils import log_event, distill_context, parse_llm_response
 from config import PLAN_ADHERENCE_PROBABILITY, AVG_DAYS_PER_MEMBER_QUESTION, LOCS
 import json
+
+def dialog_flow_process(env, state):
+    """
+    Observes conversations and intervenes if they become stuck in a loop.
+    """
+    yield env.timeout(1) # Delay start
+    while True:
+        yield env.timeout(0.5) # Check every 12 simulation hours
+
+        message_events = [event for event in state.event_log if event['type'] == 'MESSAGE']
+        if len(message_events) < 6: # Need at least 6 messages to detect a back and forth
+            continue
+
+        last_6_messages = message_events[-6:]
+        
+        # Check for a simple back and forth between two participants
+        participants = [msg['source'] for msg in last_6_messages]
+        if len(set(participants)) == 2 and participants[0] == participants[2] == participants[4] and participants[1] == participants[3] == participants[5]:
+            # Simple back and forth detected.
+            log_event(state, "DIALOG_INTERVENTION", "DIALOG_FLOW_AGENT", {"message": "The conversation seems to be stuck. Let's refocus. What is the next most important health priority?"})
+            
 def timeline_process(env, state):
     """Schedules all deterministic and periodic events based on the high-level plan."""
     # Initial onboarding

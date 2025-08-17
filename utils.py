@@ -49,6 +49,17 @@ Current State (Day {state.current_day:.1f}):
         for event in non_message_events:
             critical_events_summary += f"- Event: {event['type']}, Details: {json.dumps(event['payload'])}\n"
 
+    # --- NEW: Check for Dialog Flow Interventions ---
+    dialog_intervention_summary = ""
+    intervention_events = [
+        event for event in state.event_log
+        if event['type'] == 'DIALOG_INTERVENTION' and (state.current_day - event['day']) <= 1.0
+    ]
+    if intervention_events:
+        dialog_intervention_summary = "## IMPORTANT INTERVENTION (Please Read Carefully) ##\n"
+        for event in intervention_events:
+            dialog_intervention_summary += f"- System Note: {event['payload']['message']}\n"
+
     # 3. Get recent conversation history
     recent_history = ""
     message_events = [event for event in state.event_log if event['type'] == 'MESSAGE']
@@ -61,6 +72,7 @@ Current State (Day {state.current_day:.1f}):
 
     # 5. Assemble the full context
     full_context = f"""
+{dialog_intervention_summary if dialog_intervention_summary else ''}
 {critical_events_summary if critical_events_summary else ''}
 ## CONTEXT ##
 {state_summary}
