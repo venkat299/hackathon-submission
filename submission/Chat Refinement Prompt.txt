@@ -1,0 +1,128 @@
+Instruction:
+You are given:
+
+An original conversation transcript between multiple participants.
+
+An enhanced summary of that conversation. The enhanced summary includes:
+
+All important points from the original conversation.
+
+Additional missing details that were not in the original but should now be included.
+
+Extra clarifications or structured context necessary for completeness.
+
+also omit the SIM_CORE when generating the conversation. It's just for your understanding.
+
+Your task:
+Regenerate the entire conversation so that it fully reflects everything in the enhanced summary while maintaining a natural, coherent flow. The conversation should resemble realistic WhatsApp-like exchanges—short, frequent, and purposeful—but still elaborate enough to convey all context and detail.
+
+Ruby (The Concierge / Orchestrator): 
+○ Role: The primary point of contact for all logistics. She is 
+the master of coordination, scheduling, reminders, and 
+follow-ups. She makes the entire system feel seamless. 
+○ Voice: Empathetic, organized, and proactive. She 
+anticipates needs and confirms every action. Her job is to 
+remove all friction from the client's life. 
+● Dr. Warren (The Medical Strategist): 
+○ Role: The team's physician and final clinical authority. He 
+interprets lab results, analyzes medical records, approves 
+diagnostic strategies (e.g., MRIs, advanced blood panels), 
+and sets the overarching medical direction. 
+○ Voice: Authoritative, precise, and scientific. He explains 
+complex medical topics in clear, understandable terms. 
+● Advik (The Performance Scientist): 
+○ Role: The data analysis expert. He lives in wearable data 
+(Whoop, Oura), looking for trends in sleep, recovery, HRV, 
+and stress. He manages the intersection of the nervous 
+system, sleep, and cardiovascular training. 
+○ Voice: Analytical, curious, and pattern-oriented. He 
+communicates in terms of experiments, hypotheses, and 
+data-driven insights. 
+● Carla (The Nutritionist): 
+○ Role: The owner of the "Fuel" pillar. She designs nutrition 
+plans, analyzes food logs and CGM data, and makes all 
+supplement recommendations. She often coordinates 
+with household staff like chefs. 
+○ Voice: Practical, educational, and focused on behavioral 
+change. She explains the "why" behind every nutritional 
+choice. 
+● Rachel (The PT / Physiotherapist): 
+○ Role: The owner of the "Chassis." She manages everything 
+related to physical movement: strength training, mobility, 
+injury rehabilitation, and exercise programming. 
+○ Voice: Direct, encouraging, and focused on form and 
+function. She is the expert on the body's physical 
+structure and capacity. 
+● Neel (The Concierge Lead / Relationship Manager): 
+○ Role: The senior leader of the team. He steps in for major 
+strategic reviews (QBRs), to de-escalate client 
+frustrations, and to connect the day-to-day work back to 
+the client's highest-level goals and the overall value of 
+the program. 
+○ Voice: Strategic, reassuring, and focused on the big 
+picture. He provides context and reinforces the long-term 
+vision.
+Members profile
+MEMBER_PROFILE = {
+    "name": "Rohan Patel",
+    "age": 46,
+    "goals": [
+        "Reduce risk of heart disease by maintaining healthy cholesterol and blood pressure. ",
+        "Enhance cognitive function and focus for sustained mental performance. ",
+        "Implement annual full-body health screenings for early detection. "
+    ],
+    "personality": "Analytical, driven, values efficiency and evidence-based approaches. Time-constrained, needs clear action plans. Can be skeptical of 'woo-woo' wellness trends.",
+    "health_conditions":["Manages borderline high blood pressure (hypertension)."],
+    "wearables": "Garmin"
+}
+
+# --- Stochastic Event Parameters ---
+# Average number of days between member-initiated questions
+# Based on "up to 5 conversations started by the member per week"
+AVG_DAYS_PER_MEMBER_QUESTION = 7 / 5.0
+
+# Probability that the member will deviate from a proposed plan
+PLAN_ADHERENCE_PROBABILITY = 0.50
+
+
+
+LOCS = ["UK", "US", "South Korea", "Jakarta"]
+Guidelines:
+
+Cover the entire timeline from start date to end date, with clear date headers for each phase.
+
+Use a natural chat-like format (short, clear messages, frequent back-and-forth, similar to WhatsApp or Slack).
+
+Ensure depth without dragging:
+
+Each message should add unique value—clarification, decision, reasoning, or progress update.
+
+Avoid redundant statements or unnecessary pleasantries.
+
+Multiple interactions per date range: Make it feel like they checked in at different times over days.
+
+Maintain professional yet conversational tone (natural, not robotic).
+
+Do NOT omit any details from the enhanced summary; integrate everything into the flow naturally.
+
+Add contextual touches: follow-up questions, confirmations, short explanations, and occasional emojis (optional for realism).
+
+No monologues: Break complex ideas into several shorter, connected messages for realism.
+The conversation is as follows:
+[09/03/25, 12:57 AM] Rohan: 24-48 hours, got it. Let's prioritize those actionable recommendations then.
+[09/09/25, 11:59 PM] Rachel: Hey Rohan! New plan's live. How are those glute bridges feeling today? Really focusing on squeezing your core?
+[09/11/25, 01:40 AM] Rohan: New plan, got it. Glute bridges are... functional. Let's see what the new recommendations are.
+
+
+Here is the summary
+Day 226–240 (Sep 2 – Sep 15, 2025): Final Evaluation & Transition
+
+Rohan inquires about saliva markers beyond cortisol; Advik cites alpha-amylase + IGF-1.
+
+Rachel reintroduces glute bridge check-ins.
+
+Missing items added: Comprehensive final evaluation milestone initiated, with wrap-up planning for long-term transition.
+
+
+
+
