@@ -22,6 +22,7 @@ from config import (
 INPUT_CHAT_FILE = 'whatsapp.txt'
 OUTPUT_CSV_FILE = 'structured_events.csv'
 CONTEXT_WINDOW_SIZE = 5
+DISABLE_LLM_CACHE = True
 
 # --- Member Profile (for LLM context) ---
 MEMBER_PROFILE = {
@@ -37,18 +38,29 @@ MEMBER_PROFILE = {
 # --- DSPy Configuration ---
 def setup_dspy_local_llm():
     load_dotenv()
+    http_headers = {}
+    if DISABLE_LLM_CACHE:
+        http_headers = {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache"
+        }
+        print("LLM caching is disabled.")
+
+
     if LLM_PROVIDER == "local":
         print(f"--- Configuring for local LLM: {LOCAL_LLM_MODEL} ---")
         lm = dspy.LM(
             model=LOCAL_LLM_MODEL,
             base_url=LOCAL_LLM_BASE_URL,
-            api_key=LOCAL_LLM_API_KEY
+            api_key=LOCAL_LLM_API_KEY,
+            headers=http_headers
         )
     elif LLM_PROVIDER == "google":
         print(f"--- Configuring for Google LLM: {GOOGLE_LLM_MODEL} ---")
         lm = dspy.LM(
             model=GOOGLE_LLM_MODEL,
-            api_key=os.getenv("GOOGLE_API_KEY")
+            api_key=os.getenv("GOOGLE_API_KEY"),
+            headers=http_headers
         )
     else:
         raise ValueError(f"Invalid LLM_PROVIDER in config: {LLM_PROVIDER}")
@@ -59,36 +71,66 @@ def setup_dspy_local_llm():
 # --- DSPy Signature for Event Extraction ---
 class ExtractEventFromChat(dspy.Signature):
     """
-    **SYSTEM INSTRUCTION: Your ONLY output must be a single, valid JSON object matching the schema below.**
-    Analyze the 'current_message' (which is chat number {chat_number}) within the 'conversation_context'.
-    Extract and structure the information into a single JSON object.
-    Deduce the 'event_class', 'event_type', and other fields logically from the text.
-    Determine the 'prev_reference_chat_number' by identifying which previous chat this message is a reply to. If it's a new topic, this should be 0.
-    Summarize the provided 'conversation_context' into a concise text string for the 'prev_summarized_context' field.
+    **SYSTEM INSTRUCTION: Your ONLY output must be a single, valid JSON object matching the schema below. All fields are mandatory.**
+
+    **Task**: Analyze the 'current_message' within the 'conversation_context' and structure it into a JSON object.
+
+    **Column Explanations**:
+    - **is_significant**: A boolean (true/false). Set to 'true' if the event is important for plotting a health journey.
+        - SIGNIFICANT event_classes: 'travel', 'health_event', 'intervention', 'deviation'.
+        - SIGNIFICANT event_types: 'symptom_reported', 'diagnostic_test', 'therapy', 'medication_change', 'hospital_visit', 'consult', 'missed_consult'.
+        - If the event belongs to any of these, set 'is_significant' to true. Otherwise, false.
+    - **event_class**: The broad category of the event. This is the parent category.
+        - 'health_event': Related to the member's physical or mental state (e.g., symptoms, feelings).
+        - 'intervention': An action taken by the care team to guide the member (e.g., giving advice, changing a plan).
+        - 'consultation': A direct interaction or conversation (e.g., asking a question, scheduling).
+        - 'logistics': Administrative tasks (e.g., sending documents, reminders).
+        - 'deviation': The member is not following the plan.
+        - 'travel': Related to the member traveling.
+    - **event_type**: The specific sub-type of the event_class.
+        - Examples for 'health_event': 'symptom_reported', 'feeling_expressed'.
+        - Examples for 'intervention': 'recommendation_given', 'plan_updated', 'medication_change'.
+        - Examples for 'consultation': 'question_asked', 'consult_scheduled', 'information_request'.
+        - Examples for 'logistics': 'document_sent', 'reminder_sent'.
+
+    **Few-shot Examples**:
+    1.  **Message**: "[01/15/25, 05:02 PM] Rohan: Given my goals, what's the most efficient initial step we can take?"
+        **Output Hint**: 'is_significant' is true. This is a 'consultation' where a 'question_asked' is the specific event.
+    2.  **Message**: "[01/15/25, 05:45 PM] Advik: Best first move: a 7-day HRV baseline."
+        **Output Hint**: 'is_significant' is true. This is an 'intervention' where a 'recommendation_given' is the specific event.
+    3.  **Message**: "[01/15/25, 11:45 PM] Ruby: Perfect, I’ll send onboarding docs tonight."
+        **Output Hint**: 'is_significant' is false. This is a 'logistics' event where the 'event_type' is 'document_sent'.
     """
     
-    conversation_context = dspy.InputField(desc="A summary of the last few processed events, including their chat numbers.")
-    current_message = dspy.InputField(desc="The specific chat message to analyze. Format can be '[Timestamp] Actor: Message' or 'Timestamp | Actor: Message'.")
+    conversation_context = dspy.InputField(desc="A summary of the last few processed events, including their global chat numbers.")
+    current_message = dspy.InputField(desc="The specific chat message to analyze.")
     member_profile = dspy.InputField(desc="JSON string providing context about the member.")
-    chat_number = dspy.InputField(desc="The sequential number of the current chat message.")
+    chat_number = dspy.InputField(desc="The global chat number of the current message.")
 
     event_json = dspy.OutputField(
         desc="A single, valid JSON object representing the structured event. Do not output any other text.",
         prefix="{",
         json_schema={
-            "timestamp": "string",
-            "prev_reference_chat_number": "integer (The chat number this message is a reply to. 0 if it's not a direct reply.)",
-            "prev_summarized_context": "string (A concise summary of the conversation history provided as context.)",
-            "event_class": "string (e.g., 'consultation', 'health_event', 'intervention', 'logistics', 'deviation')",
-            "event_type": "string (e.g., 'question_asked', 'recommendation_given', 'symptom_reported', 'diagnostic_test', 'scheduling')",
-            "description": "string (A concise summary of the event from the message)",
-            "reason_context": "string (Why this event occurred, based on the conversation)",
-            "actor": "string (Who initiated this specific message, e.g., 'Rohan', 'Dr. Warren')",
-            "outcome_decision": "string (What was decided or the immediate result of this message)",
-            "duration_hours": "float (Estimate if mentioned, otherwise 0.0)",
-            "consult_type": "string (e.g., 'doctor', 'nutritionist', 'logistics_coordinator', 'member_query', 'none')",
-            "follow_up": "boolean (Does this message imply a follow-up is needed?)",
-            "metadata": "object (JSON object for extra attributes like test results, locations, etc.)"
+            "type": "object",
+            "properties": {
+                "is_significant": {"type": "boolean"},
+                "timestamp": {"type": "string"},
+                "event_class": {"type": "string"},
+                "event_type": {"type": "string"},
+                "description": {"type": "string"},
+                "reason_context": {"type": "string"},
+                "actor": {"type": "string"},
+                "outcome_decision": {"type": "string"},
+                "duration_hours": {"type": "number"},
+                "consult_type": {"type": "string"},
+                "follow_up": {"type": "boolean"},
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "is_significant", "timestamp", "event_class", "event_type",
+                "description", "reason_context", "actor", "outcome_decision",
+                "duration_hours", "consult_type", "follow_up", "metadata"
+            ]
         }
     )
 
@@ -113,8 +155,8 @@ class EventExtractor(dspy.Module):
 # --- Main Script Logic ---
 def process_chat_history():
     """
-    Reads the chat history, handles multi-line messages, processes each message
-    with the LLM, and writes the structured data to a CSV file.
+    Reads chat history, processes messages one-by-one with an LLM,
+    and writes the structured data to a CSV file.
     """
     # 1. Setup
     setup_dspy_local_llm()
@@ -122,11 +164,16 @@ def process_chat_history():
     context_summary = deque(maxlen=CONTEXT_WINDOW_SIZE)
     chat_counter = 0
 
+    # --- Clear previous output file ---
+    if os.path.exists(OUTPUT_CSV_FILE):
+        os.remove(OUTPUT_CSV_FILE)
+        print(f"Cleared previous output file: '{OUTPUT_CSV_FILE}'")
+
     # 2. Define CSV structure
     csv_columns = [
-        'chat_number', 'timestamp', 'prev_reference_chat_number', 'prev_summarized_context',
-        'event_class', 'event_type', 'description', 'reason_context', 'actor',
-        'outcome_decision', 'duration_hours', 'consult_type', 'follow_up', 'metadata'
+        'is_significant', 'chat_number', 'timestamp', 'event_class', 'event_type',
+        'description', 'reason_context', 'actor', 'outcome_decision',
+        'duration_hours', 'consult_type', 'follow_up', 'metadata'
     ]
 
     # 3. Read input and open output
@@ -148,21 +195,20 @@ def process_chat_history():
                     full_message = message_blocks[i] + message_blocks[i+1]
                     messages.append(full_message.strip())
 
-            # 4. Process each extracted message block
+            # 4. Process messages one by one
             for message in messages:
-                if not message or "SIM_CORE" in message:
-                    continue 
+                if not message.strip():
+                    continue
 
                 chat_counter += 1
                 processed_message = re.sub(r'\s*\n\s*', ' ', message).strip()
-
+                
                 print(f"\n--- Processing Message {chat_counter} ---")
                 print(f"Raw Input: {processed_message}")
 
                 try:
                     current_context_list = list(context_summary)
                     
-                    # Call the LLM to extract the event
                     prediction = event_extractor(
                         conversation_context=current_context_list,
                         current_message=processed_message,
@@ -178,28 +224,25 @@ def process_chat_history():
                     
                     event_data = json.loads(raw_json_str)
                     
-                    # Populate row data from LLM output
-                    row_data = {col: event_data.get(col, '') for col in csv_columns}
+                    # Populate row from LLM and constants
+                    row_data = {col: event_data.get(col) for col in csv_columns if col != 'chat_number'}
                     row_data['chat_number'] = chat_counter
-                    # Get the summarized context from the LLM's own output
-                    row_data['prev_summarized_context'] = event_data.get('prev_summarized_context', '')
 
-
-                    if isinstance(row_data['metadata'], dict):
+                    # Convert metadata to string for CSV
+                    if isinstance(row_data.get('metadata'), dict):
                         row_data['metadata'] = json.dumps(row_data['metadata'])
 
                     writer.writerow(row_data)
-                    print(f"Successfully processed and saved event: {row_data['event_type']}")
+                    print(f"  - Saved event for chat #{chat_counter}: {row_data.get('event_type')}")
 
-                    # Update context for the next iteration
                     context_summary.append({
                         "number": chat_counter,
-                        "summary": f"On {row_data['timestamp']}, {row_data['actor']} discussed '{row_data['description']}', deciding '{row_data['outcome_decision']}'."
+                        "summary": f"On {row_data.get('timestamp')}, {row_data.get('actor')} discussed '{event_data.get('description', '')}', deciding '{event_data.get('outcome_decision', '')}'."
                     })
 
-                except json.JSONDecodeError as e:
-                    print(f"!! ERROR: Failed to decode JSON from LLM response. Error: {e}")
-                    print(f"LLM Raw Output: {prediction.event_json}")
+                except (json.JSONDecodeError, TypeError) as e:
+                    print(f"!! ERROR: Failed to decode or process LLM response. Error: {e}")
+                    print(f"LLM Raw Output: {prediction.event_json if 'prediction' in locals() else 'N/A'}")
                 except Exception as e:
                     print(f"!! An unexpected error occurred: {e}")
 
@@ -234,6 +277,12 @@ Permissions to pull wearable data
 
 [01/16/25, 10:48 PM] Rohan:
 Thanks. Send them over. I’ll skim, but I need a clear timeline — and I only want essential data first.
+
+[01/17/25, 09:00 AM] Dr. Warren:
+Rohan, the timeline is ready. The first phase focuses on establishing baselines for your key biomarkers. This is non-negotiable for tracking progress.
+
+[01/17/25, 09:30 AM] Rohan:
+Fine. What's the first test?
 """)
 
     process_chat_history()
