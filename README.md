@@ -70,14 +70,14 @@ Edit `config.py` to customize the run:
 
 ## Member Journey Visualization Methodology (process_chat.py)
 
-1. Parse simulation outputs
-   - Load the structured event log and chat transcript produced by the simulation.
+1. Parse Whatsapp chat history
+   - Load the chat transcript produced by the simulation.
    - Organize messages by day, tagging them by source and topic (plan updates, lab results, travel, etc.).
 2. Aggregate state data
-   - Combine communication records with wearable metrics, lab markers, and adherence flags stored in the event log to build a day-by-day profile of the member.
+   - Combine communication records with wearable metrics, lab markers, and adherence flags stored in the event log to build a day-by-day profile of the member using LLM.
 3. Generate visual summaries
    - Produce timelines and snapshot views showing conversation volume, key interventions, and health metrics.
-   - Enable queries for specific dates to understand the member's context and progress at that moment.
+   - Enable queries for specific dates to understand the member's context and progress at that moment.(TODO)
 
 Here’s what the visulaisation looks like:
 
